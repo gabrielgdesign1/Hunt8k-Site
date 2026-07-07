@@ -35,3 +35,6 @@ yarn-error.log*
 /Gaming thumbnails
 /IRL thumbnails
 /src/raw
+
+.vercel
+.env*
