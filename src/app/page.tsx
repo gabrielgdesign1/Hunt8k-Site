@@ -4,7 +4,6 @@ import Work from "@/components/work/Work";
 import About from "@/components/About";
 import Stats from "@/components/Stats";
 import Process from "@/components/Process";
-import Toolkit from "@/components/Toolkit";
 import Testimonials from "@/components/Testimonials";
 import Faq from "@/components/Faq";
 import Contact from "@/components/Contact";
@@ -20,7 +19,6 @@ export default function Home() {
         <About />
         <Stats />
         <Process />
-        <Toolkit />
         <Testimonials />
         <Faq />
         <Contact />

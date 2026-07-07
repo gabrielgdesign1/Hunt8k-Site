@@ -1,15 +1,15 @@
+import type { SocialKey } from "@/components/ui/SocialIcon";
+
 export const SITE = {
   name: "8K",
   fullName: "Hunt8K",
   role: "Thumbnail Designer",
   tagline: "Scroll-stopping thumbnails for gaming & IRL creators.",
   email: "hunt8k.designs@gmail.com", // TODO: replace with real booking email
-  discord: "hunt8k",
   socials: [
-    { label: "X / Twitter", href: "https://x.com" },
-    { label: "Instagram", href: "https://instagram.com" },
-    { label: "Discord", href: "https://discord.com" },
-    { label: "YouTube", href: "https://youtube.com" },
+    { label: "Twitter / X", href: "https://x.com/Hunt8K", icon: "x" as SocialKey },
+    { label: "Instagram", href: "https://www.instagram.com/hunt8k.visuals/", icon: "instagram" as SocialKey },
+    { label: "Behance", href: "https://www.behance.net/Hunt8K", icon: "behance" as SocialKey },
   ],
 };
 
@@ -78,15 +78,6 @@ export const PROCESS = [
     title: "Refine & Deliver",
     body: "Pixel-level polish, platform-optimised exports and fast revisions. Delivered ready to upload — usually within 24 hours.",
   },
-];
-
-export const TOOLKIT = [
-  { name: "Photoshop", level: 98, note: "Compositing, retouch, color." },
-  { name: "After Effects", level: 88, note: "Motion & animated variants." },
-  { name: "Illustrator", level: 90, note: "Clean vector logotypes." },
-  { name: "Blender / C4D", level: 82, note: "3D text & render pop-outs." },
-  { name: "Topaz AI", level: 85, note: "Upscale & face enhance." },
-  { name: "Nano Banana", level: 80, note: "Concepts & references." },
 ];
 
 export type Testimonial = {

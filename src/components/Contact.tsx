@@ -1,28 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { SITE } from "@/lib/site";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Reveal from "@/components/ui/Reveal";
-import MagneticButton from "@/components/ui/MagneticButton";
+import SocialIcon from "@/components/ui/SocialIcon";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", channel: "", message: "" });
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const subject = encodeURIComponent(
-      `New thumbnail enquiry from ${form.name || "a creator"}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nChannel: ${form.channel}\n\n${form.message}`
-    );
-    window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
-  };
-
-  const field =
-    "w-full rounded-xl border border-white/12 bg-white/[0.02] px-5 py-4 text-[var(--color-bone)] placeholder:text-[var(--color-ash-dim)] outline-none transition-colors focus:border-[var(--color-red)]";
-
   return (
     <section id="contact" className="relative z-10 py-24 md:py-32">
       {/* glow */}
@@ -44,96 +27,59 @@ export default function Contact() {
             </Reveal>
             <Reveal i={2}>
               <p className="mt-6 max-w-md text-[var(--color-ash)] leading-relaxed">
-                Got a video that deserves a better thumbnail? Tell me about your
-                channel — I usually reply within a few hours.
+                Got a video that deserves a better thumbnail? Reach out on
+                socials or drop an email — I usually reply within a few hours.
               </p>
             </Reveal>
 
             <Reveal i={3}>
-              <div className="mt-9 flex flex-col gap-4">
-                <a
-                  href={`mailto:${SITE.email}`}
-                  data-cursor="email"
-                  className="group flex items-center gap-4 text-lg text-[var(--color-bone)]"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 transition-colors group-hover:border-[var(--color-red)] group-hover:text-[var(--color-red)]">
-                    @
-                  </span>
-                  {SITE.email}
-                </a>
-                <div className="flex flex-wrap gap-3">
-                  {SITE.socials.map((s) => (
-                    <a
-                      key={s.label}
-                      href={s.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rounded-full border border-white/12 px-4 py-2 font-mono text-xs uppercase tracking-widest text-[var(--color-ash)] transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-bone)]"
-                    >
-                      {s.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
+              <a
+                href={`mailto:${SITE.email}`}
+                data-cursor="email"
+                className="group mt-9 flex w-fit items-center gap-4 text-lg text-[var(--color-bone)]"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 transition-colors group-hover:border-[var(--color-red)] group-hover:text-[var(--color-red)]">
+                  @
+                </span>
+                {SITE.email}
+              </a>
             </Reveal>
           </div>
 
-          {/* form */}
+          {/* socials */}
           <Reveal i={2}>
-            <form
-              onSubmit={submit}
-              className="rounded-2xl border border-white/10 bg-[var(--color-ink-2)] p-6 md:p-8"
-            >
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
-                    Your Name
-                  </label>
-                  <input
-                    required
-                    className={field}
-                    placeholder="e.g. Alex"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
-                    Channel / Link
-                  </label>
-                  <input
-                    className={field}
-                    placeholder="youtube.com/@yourchannel"
-                    value={form.channel}
-                    onChange={(e) =>
-                      setForm({ ...form, channel: e.target.value })
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
-                    The Project
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    className={`${field} resize-none`}
-                    placeholder="Tell me about the video, style and volume…"
-                    value={form.message}
-                    onChange={(e) =>
-                      setForm({ ...form, message: e.target.value })
-                    }
-                  />
-                </div>
-                <MagneticButton
-                  as="button"
-                  cursor="send"
-                  className="group mt-2 w-full overflow-hidden rounded-xl bg-[var(--color-red)] px-6 py-4 text-sm font-bold uppercase tracking-wide text-white"
+            <div className="flex flex-col gap-4">
+              {SITE.socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="open"
+                  className="group flex items-center justify-between rounded-2xl border border-white/10 bg-[var(--color-ink-2)] px-6 py-5 transition-colors duration-300 hover:border-[var(--color-red)]/50"
                 >
-                  <span className="relative z-10">Send Message →</span>
-                </MagneticButton>
-              </div>
-            </form>
+                  <span className="flex items-center gap-4">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 text-[var(--color-bone)] transition-colors duration-300 group-hover:bg-[var(--color-red)] group-hover:text-white">
+                      <SocialIcon icon={s.icon} />
+                    </span>
+                    <span className="font-display text-2xl uppercase leading-none">
+                      {s.label}
+                    </span>
+                  </span>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="text-[var(--color-ash)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--color-red-bright)]"
+                  >
+                    <path d="M7 17L17 7M17 7H8M17 7V16" />
+                  </svg>
+                </a>
+              ))}
+            </div>
           </Reveal>
         </div>
       </div>

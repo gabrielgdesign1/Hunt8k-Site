@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Lenis from "lenis";
 import { SITE } from "@/lib/site";
+import SocialIcon from "@/components/ui/SocialIcon";
 
 function toTop() {
   const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
@@ -36,16 +37,17 @@ export default function Footer() {
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             {SITE.socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm text-[var(--color-ash)] transition-colors hover:text-[var(--color-red-bright)]"
+                data-cursor={s.label}
+                className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-[var(--color-ash)] transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-red-bright)]"
               >
-                {s.label}
+                <SocialIcon icon={s.icon} className="h-4 w-4" />
               </a>
             ))}
           </div>
