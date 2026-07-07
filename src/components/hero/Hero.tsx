@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { WORK, workSrc } from "@/lib/site";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, enableMotion } from "@/lib/motion";
 
 const ThumbnailTunnel = dynamic(() => import("./ThumbnailTunnel"), {
   ssr: false,
@@ -93,15 +93,30 @@ export default function Hero() {
           </div>
         )}
 
-        {/* vignette + gradient wash */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(6,6,7,0.7)_70%,rgba(6,6,7,0.98)_100%)]" />
+        {/* vignette + gradient wash — darkest through the center so text stays readable */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,6,7,0.6)_0%,rgba(6,6,7,0.35)_38%,rgba(6,6,7,0.75)_72%,rgba(6,6,7,0.97)_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--color-ink)] to-transparent" />
+
+        {/* dedicated contrast plate directly behind the headline block */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="h-[85%] w-[94%] max-w-3xl rounded-[4rem] bg-[var(--color-ink)]/65 blur-3xl" />
+        </div>
 
         {/* overlay content */}
         <div
           ref={overlay}
           className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center will-change-transform"
         >
+          {reduce && mounted && (
+            <button
+              onClick={enableMotion}
+              data-cursor="enable"
+              className="mb-4 flex items-center gap-2 rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--color-red-bright)] transition-colors hover:bg-[var(--color-red)]/20"
+            >
+              ⚡ Reduced motion detected — tap to enable full animation
+            </button>
+          )}
+
           <div className="mb-7 flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-md">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-red)] opacity-75" />
