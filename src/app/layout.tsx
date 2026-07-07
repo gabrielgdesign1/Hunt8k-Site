@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Inter, JetBrains_Mono } from "next/font/google";
+import { Jersey_15, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Cursor from "@/components/ui/Cursor";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 
-const anton = Anton({
+const jersey = Jersey_15({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-anton",
+  variable: "--font-jersey",
   display: "swap",
 });
 const inter = Inter({
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${inter.variable} ${mono.variable}`}
+      className={`${jersey.variable} ${inter.variable} ${mono.variable}`}
     >
       <body className="grain antialiased">
         <Preloader />

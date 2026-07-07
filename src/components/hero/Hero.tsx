@@ -46,17 +46,16 @@ export default function Hero() {
         },
       });
 
+      gsap.set(overlay.current, { transformOrigin: "center center" });
       gsap.to(overlay.current, {
         scrollTrigger: {
           trigger: wrap.current,
           start: "top top",
-          end: "55% top",
+          end: "58% top",
           scrub: 0.6,
         },
-        opacity: 0,
-        scale: 1.14,
-        filter: "blur(6px)",
-        ease: "none",
+        scale: 0,
+        ease: "power2.in",
       });
     }, wrap);
 
@@ -115,7 +114,7 @@ export default function Hero() {
 
           <h1 className="font-display display-hero text-balance">
             <span className="block text-[var(--color-bone)]">Make Them</span>
-            <span className="block text-gradient-red">Click.</span>
+            <span className="block text-[var(--color-red)]">Click.</span>
           </h1>
 
           <p className="mt-7 max-w-xl text-balance text-base leading-relaxed text-[var(--color-ash)] sm:text-lg">
