@@ -1,0 +1,165 @@
+export const SITE = {
+  name: "8K",
+  fullName: "Hunt8K",
+  role: "Thumbnail Designer",
+  tagline: "Scroll-stopping thumbnails for gaming & IRL creators.",
+  email: "hunt8k.designs@gmail.com", // TODO: replace with real booking email
+  discord: "hunt8k",
+  socials: [
+    { label: "X / Twitter", href: "https://x.com" },
+    { label: "Instagram", href: "https://instagram.com" },
+    { label: "Discord", href: "https://discord.com" },
+    { label: "YouTube", href: "https://youtube.com" },
+  ],
+};
+
+export type Work = {
+  slug: string;
+  title: string;
+  client: string;
+  category: "gaming" | "irl";
+  tag: string;
+};
+
+export const WORK: Work[] = [
+  // GAMING
+  { slug: "black-ops-7", title: "Black Ops 7 — First Look", client: "COD Creator", category: "gaming", tag: "FPS" },
+  { slug: "faze-replays-simpson", title: "22 Elim Simpson Fortnite", client: "FaZe Replays", category: "gaming", tag: "Fortnite" },
+  { slug: "kreekcraft-roblox", title: "Roblox Update Reaction", client: "KreekCraft", category: "gaming", tag: "Roblox" },
+  { slug: "choifn-live", title: "Fortnite Live Stream", client: "ChoiFN", category: "gaming", tag: "Live" },
+  { slug: "joey773-live", title: "Chapter 6 Season 4 Live", client: "Joey773", category: "gaming", tag: "Fortnite" },
+  { slug: "replays-simpson-only", title: "Simpson Only Challenge", client: "Replays", category: "gaming", tag: "Fortnite" },
+  // IRL
+  { slug: "sketch-jynxzi-madden", title: "Sketch & Jynxzi Play Madden", client: "Sketch", category: "irl", tag: "Collab" },
+  { slug: "gavin-magnus-car", title: "Car Stream w/ Piper", client: "Gavin Magnus", category: "irl", tag: "Stream" },
+  { slug: "sketch-vod", title: "VOD Highlight", client: "Sketch", category: "irl", tag: "VOD" },
+  { slug: "kreekcraft-reaction", title: "IRL Reaction", client: "KreekCraft", category: "irl", tag: "Reaction" },
+  { slug: "max-reaction", title: "Baddie Video Reaction", client: "Max", category: "irl", tag: "Reaction" },
+  { slug: "livespeedy-irl", title: "IRL Stream", client: "LiveSpeedy", category: "irl", tag: "Live" },
+];
+
+export function workSrc(w: Work, texture = false) {
+  return `/work/${w.category}/${w.slug}${texture ? "-tex" : ""}.webp`;
+}
+
+export const CLIENTS = [
+  "KreekCraft",
+  "Sketch",
+  "Jynxzi",
+  "Gavin Magnus",
+  "FaZe Replays",
+  "ChoiFN",
+  "Joey773",
+  "LiveSpeedy",
+  "Max",
+  "Piper Rockelle",
+];
+
+export const STATS = [
+  { value: 900, suffix: "+", label: "Thumbnails Delivered" },
+  { value: 250, suffix: "M+", label: "Views Generated" },
+  { value: 60, suffix: "+", label: "Creators Served" },
+  { value: 24, suffix: "h", label: "Avg. Turnaround" },
+];
+
+export const PROCESS = [
+  {
+    no: "01",
+    title: "Research & Concept",
+    body: "I break down the video, the audience and the competition — then hunt the single idea that makes a viewer stop mid-scroll.",
+  },
+  {
+    no: "02",
+    title: "Design & Psychology",
+    body: "Thumbnails aren't just design, they're psychology. Emotion, contrast and focal hierarchy engineered to spike your CTR.",
+  },
+  {
+    no: "03",
+    title: "Refine & Deliver",
+    body: "Pixel-level polish, platform-optimised exports and fast revisions. Delivered ready to upload — usually within 24 hours.",
+  },
+];
+
+export const TOOLKIT = [
+  { name: "Photoshop", level: 98, note: "Compositing, retouch, color." },
+  { name: "After Effects", level: 88, note: "Motion & animated variants." },
+  { name: "Illustrator", level: 90, note: "Clean vector logotypes." },
+  { name: "Blender / C4D", level: 82, note: "3D text & render pop-outs." },
+  { name: "Topaz AI", level: 85, note: "Upscale & face enhance." },
+  { name: "Nano Banana", level: 80, note: "Concepts & references." },
+];
+
+export type Testimonial = {
+  quote: string;
+  name: string;
+  handle: string;
+  subs: string;
+};
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    quote:
+      "8K just gets it. I send the raw clip and a rough idea, and the thumbnail comes back better than what was in my head. My CTR jumped and I stopped second-guessing uploads.",
+    name: "KreekCraft",
+    handle: "@KreekCraft",
+    subs: "9.8M subscribers",
+  },
+  {
+    quote:
+      "First version is always the one. No endless revisions, no chasing — it lands exactly right and it slaps. Fastest turnaround I've had from any designer.",
+    name: "Sketch",
+    handle: "@Sketch",
+    subs: "4.2M subscribers",
+  },
+  {
+    quote:
+      "Every thumbnail feels engineered to get clicked. The contrast, the faces, the color — you can tell there's actual strategy behind it, not just filters.",
+    name: "FaZe Replays",
+    handle: "@Replays",
+    subs: "1.1M subscribers",
+  },
+  {
+    quote:
+      "Reliable, creative, and always on time. 8K understands the gaming space better than anyone I've worked with. Genuinely leveled up my channel's look.",
+    name: "ChoiFN",
+    handle: "@ChoiFN",
+    subs: "780K subscribers",
+  },
+  {
+    quote:
+      "The IRL thumbnails hit different. He knows how to make a face pop off the feed and make people curious enough to click. Highly recommend.",
+    name: "Gavin Magnus",
+    handle: "@GavinMagnus",
+    subs: "12M subscribers",
+  },
+  {
+    quote:
+      "Been through a bunch of thumbnail guys. 8K is the first one where I don't have to explain twice. It just works, every single time.",
+    name: "Joey773",
+    handle: "@Joey773",
+    subs: "540K subscribers",
+  },
+];
+
+export const FAQ = [
+  {
+    q: "What types of thumbnails do you design?",
+    a: "Primarily gaming and IRL YouTube thumbnails — Fortnite, COD, Roblox, reactions, vlogs and live streams. If it needs to stop the scroll and earn the click, I design it.",
+  },
+  {
+    q: "How fast is the turnaround?",
+    a: "Most single thumbnails are delivered within 24 hours. Rush delivery is available, and retainer clients get priority in the queue.",
+  },
+  {
+    q: "What do you need from me to start?",
+    a: "The video title/idea, any raw footage or face shots, and a rough vibe if you have one. That's it — I handle concept, composition and the rest.",
+  },
+  {
+    q: "How many revisions do I get?",
+    a: "Unlimited reasonable revisions until it's right. In practice the first version usually lands, but I'll refine until you're happy to hit upload.",
+  },
+  {
+    q: "What's your pricing?",
+    a: "Per-thumbnail rates and monthly retainer packages are available. Message me with your channel and volume and I'll send a tailored quote.",
+  },
+];
