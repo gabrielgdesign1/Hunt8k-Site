@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Lenis from "lenis";
-import MagneticButton from "./ui/MagneticButton";
 import { SITE } from "@/lib/site";
 
 const LINKS = [
@@ -48,20 +47,17 @@ export default function Navbar() {
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 md:px-8">
           <button
             onClick={() => go("#top")}
-            className="group flex items-center gap-2.5"
+            className="group flex items-center"
             data-cursor="top"
           >
             <Image
               src="/branding/logo.png"
               alt="Hunt8K"
-              width={54}
-              height={32}
+              width={88}
+              height={52}
               priority
-              className="h-7 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_18px_rgba(255,33,22,0.7)]"
+              className="h-11 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_18px_rgba(255,33,22,0.7)]"
             />
-            <span className="font-display text-lg leading-none tracking-tight">
-              HUNT8K
-            </span>
           </button>
 
           <div
@@ -83,19 +79,6 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <MagneticButton
-              as="button"
-              onClick={() => go("#contact")}
-              cursor="let's talk"
-              className="group hidden overflow-hidden rounded-full bg-[var(--color-red)] px-5 py-2.5 text-sm font-semibold text-white sm:inline-flex"
-            >
-              <span className="relative z-10">Hire Me</span>
-              <span className="absolute inset-0 -translate-y-full bg-white transition-transform duration-300 group-hover:translate-y-0" />
-              <span className="absolute inset-0 z-10 flex -translate-y-full items-center justify-center text-[var(--color-ink)] transition-transform duration-300 group-hover:translate-y-0">
-                Hire Me
-              </span>
-            </MagneticButton>
-
             <button
               onClick={() => setOpen((o) => !o)}
               className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] md:hidden"

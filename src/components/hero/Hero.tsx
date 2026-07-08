@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
-import MagneticButton from "@/components/ui/MagneticButton";
 import { WORK, workSrc } from "@/lib/site";
 import { prefersReducedMotion, enableMotion } from "@/lib/motion";
 
@@ -14,65 +10,22 @@ const ThumbnailTunnel = dynamic(() => import("./ThumbnailTunnel"), {
   ssr: false,
 });
 
-function scrollTo(href: string) {
-  const el = document.querySelector(href) as HTMLElement | null;
-  if (!el) return;
-  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
-  if (lenis) lenis.scrollTo(el, { offset: -20, duration: 1.4 });
-  else el.scrollIntoView({ behavior: "smooth" });
-}
-
 export default function Hero() {
-  const wrap = useRef<HTMLDivElement>(null);
-  const overlay = useRef<HTMLDivElement>(null);
-  const progress = useRef(0);
   const [reduce, setReduce] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const r = prefersReducedMotion();
-    setReduce(r);
-    if (r || !wrap.current) return;
-
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: wrap.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          progress.current = self.progress;
-        },
-      });
-
-      gsap.set(overlay.current, { transformOrigin: "center center" });
-      gsap.to(overlay.current, {
-        scrollTrigger: {
-          trigger: wrap.current,
-          start: "top top",
-          end: "58% top",
-          scrub: 0.6,
-        },
-        scale: 0,
-        ease: "power2.in",
-      });
-    }, wrap);
-
-    return () => ctx.revert();
+    setReduce(prefersReducedMotion());
   }, []);
 
   return (
-    <section
-      id="top"
-      ref={wrap}
-      className={reduce ? "relative" : "relative h-[340vh]"}
-    >
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
-        {/* 3D tunnel */}
+    <section id="top" className="relative h-screen overflow-hidden">
+      <div className="flex h-full items-center justify-center">
+        {/* 3D tunnel — static depth arrangement, reacts to mouse only */}
         {mounted && !reduce && (
           <div className="absolute inset-0">
-            <ThumbnailTunnel progress={progress} />
+            <ThumbnailTunnel />
           </div>
         )}
 
@@ -103,29 +56,16 @@ export default function Hero() {
         </div>
 
         {/* overlay content */}
-        <div
-          ref={overlay}
-          className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center will-change-transform"
-        >
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
           {reduce && mounted && (
             <button
               onClick={enableMotion}
               data-cursor="enable"
-              className="mb-4 flex items-center gap-2 rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--color-red-bright)] transition-colors hover:bg-[var(--color-red)]/20"
+              className="mb-6 flex items-center gap-2 rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--color-red-bright)] transition-colors hover:bg-[var(--color-red)]/20"
             >
               ⚡ Reduced motion detected — tap to enable full animation
             </button>
           )}
-
-          <div className="mb-7 flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-red)] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-red)]" />
-            </span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--color-ash)]">
-              Available for work · {WORK.length}+ recent drops
-            </span>
-          </div>
 
           <h1 className="font-display display-hero text-balance">
             <span className="block text-[var(--color-bone)]">Make Them</span>
@@ -137,42 +77,7 @@ export default function Hero() {
             design high-octane gaming &amp; IRL thumbnails engineered to hijack
             attention and spike your CTR.
           </p>
-
-          <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row">
-            <MagneticButton
-              as="button"
-              onClick={() => scrollTo("#work")}
-              cursor="see work"
-              className="group relative overflow-hidden rounded-full bg-[var(--color-red)] px-8 py-4 text-sm font-bold uppercase tracking-wide text-white"
-            >
-              <span className="relative z-10">View the Work</span>
-              <span className="absolute inset-0 -translate-x-full bg-black/85 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0" />
-              <span className="pointer-events-none absolute inset-0 z-10 flex -translate-x-full items-center justify-center text-sm font-bold uppercase tracking-wide text-white transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0">
-                View the Work
-              </span>
-            </MagneticButton>
-            <MagneticButton
-              as="button"
-              onClick={() => scrollTo("#contact")}
-              cursor="let's talk"
-              className="rounded-full border border-white/15 px-8 py-4 text-sm font-bold uppercase tracking-wide text-[var(--color-bone)] backdrop-blur-md transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-red-bright)]"
-            >
-              Start a Project
-            </MagneticButton>
-          </div>
         </div>
-
-        {/* scroll hint */}
-        {!reduce && (
-          <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--color-ash-dim)]">
-              Scroll to enter
-            </span>
-            <span className="flex h-9 w-5 items-start justify-center rounded-full border border-white/15 p-1">
-              <span className="h-2 w-0.5 animate-bounce rounded-full bg-[var(--color-red)]" />
-            </span>
-          </div>
-        )}
       </div>
     </section>
   );

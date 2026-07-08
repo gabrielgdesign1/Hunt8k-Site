@@ -1,13 +1,13 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Suspense, useMemo, useRef, type MutableRefObject } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { WORK, workSrc } from "@/lib/site";
 
 const URLS = WORK.map((w) => workSrc(w, true));
-const STEP = 2.6;
+const STEP = 2.4;
 
 type PlaneDef = {
   pos: [number, number, number];
@@ -25,15 +25,15 @@ function buildLayout(count: number): PlaneDef[] {
   const dummy = new THREE.Object3D();
   const defs: PlaneDef[] = [];
   for (let i = 0; i < count; i++) {
-    const z = 3 - i * STEP;
+    const z = 1 - i * STEP;
     const slot = i % 4;
     const j = rand(i);
     const k = rand(i + 99);
     let pos: [number, number, number];
-    if (slot === 0) pos = [-(3.3 + j * 0.9), -1.1 + k * 2.4, z]; // left wall
-    else if (slot === 1) pos = [3.3 + j * 0.9, 1.1 - k * 2.4, z]; // right wall
-    else if (slot === 2) pos = [-1.2 + k * 2.4, 2.4 + j * 0.7, z]; // ceiling
-    else pos = [1.2 - k * 2.4, -(2.4 + j * 0.7), z]; // floor
+    if (slot === 0) pos = [-(3.2 + j * 0.9), -1.1 + k * 2.4, z]; // left wall
+    else if (slot === 1) pos = [3.2 + j * 0.9, 1.1 - k * 2.4, z]; // right wall
+    else if (slot === 2) pos = [-1.2 + k * 2.4, 2.3 + j * 0.7, z]; // ceiling
+    else pos = [1.2 - k * 2.4, -(2.3 + j * 0.7), z]; // floor
 
     // face a point ahead on the central axis so every image angles toward the viewer
     dummy.position.set(pos[0], pos[1], pos[2]);
@@ -55,7 +55,7 @@ function Plane({ def, tex }: { def: PlaneDef; tex: THREE.Texture }) {
   useFrame((state) => {
     if (!ref.current) return;
     const t = state.clock.elapsedTime;
-    ref.current.position.y = Math.sin(t * 0.45 + seed) * 0.08;
+    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.07;
   });
   return (
     <group position={def.pos} rotation={def.rot}>
@@ -71,37 +71,30 @@ function Dust() {
   const ref = useRef<THREE.Points>(null);
   const geo = useMemo(() => {
     const g = new THREE.BufferGeometry();
-    const n = 240;
+    const n = 180;
     const arr = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 16;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 12;
-      arr[i * 3 + 2] = -Math.random() * 110 + 4;
+      arr[i * 3] = (Math.random() - 0.5) * 14;
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      arr[i * 3 + 2] = -Math.random() * 40 + 4;
     }
     g.setAttribute("position", new THREE.BufferAttribute(arr, 3));
     return g;
   }, []);
   useFrame((state) => {
-    if (ref.current) ref.current.rotation.z = state.clock.elapsedTime * 0.02;
+    if (ref.current) ref.current.rotation.z = state.clock.elapsedTime * 0.015;
   });
   return (
     <points ref={ref} geometry={geo}>
-      <pointsMaterial size={0.04} color="#ff5a4d" transparent opacity={0.55} />
+      <pointsMaterial size={0.04} color="#ff5a4d" transparent opacity={0.5} />
     </points>
   );
 }
 
-function Scene({
-  progress,
-  count,
-}: {
-  progress: MutableRefObject<number>;
-  count: number;
-}) {
+function Scene({ count }: { count: number }) {
   const defs = useMemo(() => buildLayout(count), [count]);
   const textures = useTexture(URLS);
   const mouse = useRef({ x: 0, y: 0 });
-  const { camera } = useThree();
 
   useMemo(() => {
     (Array.isArray(textures) ? textures : [textures]).forEach((t) => {
@@ -111,19 +104,18 @@ function Scene({
   }, [textures]);
 
   useFrame((state) => {
+    // gentle parallax only — camera never dollies forward, so scrolling
+    // just scrolls the page rather than flying through the scene
     mouse.current.x += (state.pointer.x - mouse.current.x) * 0.05;
     mouse.current.y += (state.pointer.y - mouse.current.y) * 0.05;
-    const travel = count * STEP;
-    const targetZ = 6 - progress.current * travel;
-    camera.position.z += (targetZ - camera.position.z) * 0.08;
-    camera.position.x += (mouse.current.x * 1.1 - camera.position.x) * 0.05;
-    camera.position.y += (-mouse.current.y * 0.7 - camera.position.y) * 0.05;
-    camera.lookAt(0, 0, camera.position.z - 8);
+    state.camera.position.x += (mouse.current.x * 1.3 - state.camera.position.x) * 0.05;
+    state.camera.position.y += (-mouse.current.y * 0.9 - state.camera.position.y) * 0.05;
+    state.camera.lookAt(0, 0, -12);
   });
 
   return (
     <>
-      <fog attach="fog" args={["#060607", 7, 30]} />
+      <fog attach="fog" args={["#060607", 6, 22]} />
       {defs.map((def, i) => (
         <Plane key={i} def={def} tex={(textures as THREE.Texture[])[def.tex]} />
       ))}
@@ -132,13 +124,9 @@ function Scene({
   );
 }
 
-export default function ThumbnailTunnel({
-  progress,
-}: {
-  progress: MutableRefObject<number>;
-}) {
+export default function ThumbnailTunnel() {
   const count =
-    typeof window !== "undefined" && window.innerWidth < 768 ? 28 : 52;
+    typeof window !== "undefined" && window.innerWidth < 768 ? 10 : 16;
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -147,7 +135,7 @@ export default function ThumbnailTunnel({
       className="!absolute inset-0"
     >
       <Suspense fallback={null}>
-        <Scene progress={progress} count={count} />
+        <Scene count={count} />
       </Suspense>
     </Canvas>
   );
