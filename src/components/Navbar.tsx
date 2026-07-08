@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Lenis from "lenis";
 import { SITE } from "@/lib/site";
@@ -22,15 +22,7 @@ function scrollTo(href: string) {
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const go = (href: string) => {
     setOpen(false);
@@ -39,11 +31,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          scrolled ? "py-3" : "py-5"
-        }`}
-      >
+      <header className="fixed inset-x-0 top-0 z-50 py-5">
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 md:px-8">
           <button
             onClick={() => go("#top")}
@@ -60,13 +48,7 @@ export default function Navbar() {
             />
           </button>
 
-          <div
-            className={`hidden items-center gap-1 rounded-full border px-2 py-2 backdrop-blur-xl transition-colors md:flex ${
-              scrolled
-                ? "border-white/10 bg-white/[0.03]"
-                : "border-transparent bg-transparent"
-            }`}
-          >
+          <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-black/45 px-2 py-2 backdrop-blur-xl md:flex">
             {LINKS.map((l) => (
               <button
                 key={l.href}

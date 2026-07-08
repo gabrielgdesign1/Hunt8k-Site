@@ -71,12 +71,6 @@ export default function Hero() {
             <span className="block text-[var(--color-bone)]">Make Them</span>
             <span className="block text-[var(--color-red)]">Click.</span>
           </h1>
-
-          <p className="mt-7 max-w-xl text-balance text-base leading-relaxed text-[var(--color-ash)] sm:text-lg">
-            I&apos;m <span className="text-[var(--color-bone)]">Hunt8K</span> — I
-            design high-octane gaming &amp; IRL thumbnails engineered to hijack
-            attention and spike your CTR.
-          </p>
         </div>
       </div>
     </section>
