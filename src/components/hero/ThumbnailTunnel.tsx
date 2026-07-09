@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -16,30 +16,35 @@ const BG_URLS = ["/hero/bg-1.webp", "/hero/bg-2.webp", "/hero/bg-3.webp"];
 const ALL_URLS = [...MAIN_URLS, ...BG_URLS];
 const BG_OFFSET = MAIN_URLS.length;
 
-const STEP = 2.4;
+const PLANE_W = 3.5;
+const PLANE_H = 1.97;
 
 type PlaneDef = {
   pos: [number, number, number];
   rot: [number, number, number];
   scale: number;
   tex: number;
+  opacity: number;
 };
 
-// deterministic pseudo-random so SSR/CSR agree and layout is stable
 function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-// the four foreground images, pinned one to each corner in a clean 2x2 grid.
-// sized to sit fully inside the frame while staying prominent.
-function buildCorners(isMobile: boolean): PlaneDef[] {
-  const x = isMobile ? 1.3 : 2.55;
-  const y = isMobile ? 2.1 : 1.62;
+// four foreground images, one per corner, sized to the viewport so they fill
+// the space as much as possible without ever clipping the edges.
+function buildCorners(halfW: number, halfH: number, isMobile: boolean): PlaneDef[] {
+  const scale = isMobile ? 0.82 : 1.06;
+  const planeHalfW = (PLANE_W * scale) / 2 * 0.95;
+  const planeHalfH = (PLANE_H * scale) / 2;
+  // keep a margin that also accounts for the mouse-parallax drift
+  const x = Math.max(planeHalfW * 0.35, halfW - planeHalfW - 0.55);
+  const y = Math.max(planeHalfH * 0.6, halfH - planeHalfH - 0.45);
   const corners: [number, number][] = [
-    [-x, y], // top-left
-    [x, y], // top-right
-    [-x, -y], // bottom-left
-    [x, -y], // bottom-right
+    [-x, y],
+    [x, y],
+    [-x, -y],
+    [x, -y],
   ];
   const dummy = new THREE.Object3D();
   return corners.map(([px, py], i) => {
@@ -49,35 +54,35 @@ function buildCorners(isMobile: boolean): PlaneDef[] {
     return {
       pos: [px, py, z],
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: isMobile ? 0.74 : 0.92,
+      scale,
       tex: i % MAIN_URLS.length,
+      opacity: 1,
     };
   });
 }
 
-// the three background images scattered further back, purely for ambient depth
+// the three background images clustered toward the CENTER, receding and faded —
+// depth that sits behind the headline, not directly behind the corner images.
 function buildDepth(count: number): PlaneDef[] {
   const dummy = new THREE.Object3D();
   const defs: PlaneDef[] = [];
   for (let i = 0; i < count; i++) {
-    const z = -3 - i * STEP;
-    const slot = i % 4;
-    const j = rand(i + 500);
-    const k = rand(i + 700);
-    let pos: [number, number, number];
-    if (slot === 0) pos = [-(3.0 + j * 1.1), -1.0 + k * 2.2, z];
-    else if (slot === 1) pos = [3.0 + j * 1.1, 1.0 - k * 2.2, z];
-    else if (slot === 2) pos = [-1.0 + k * 2.2, 2.1 + j * 0.6, z];
-    else pos = [1.0 - k * 2.2, -(2.1 + j * 0.6), z];
-
+    const z = -4.5 - i * 2.6;
+    const angle = rand(i) * Math.PI * 2;
+    const r = 0.4 + rand(i + 21) * 1.7;
+    const pos: [number, number, number] = [
+      Math.cos(angle) * r,
+      Math.sin(angle) * r * 0.7,
+      z,
+    ];
     dummy.position.set(pos[0], pos[1], pos[2]);
     dummy.lookAt(0, 0, z + 9);
-
     defs.push({
       pos,
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: 0.75 + j * 0.3,
+      scale: 0.6 + rand(i + 5) * 0.3,
       tex: BG_OFFSET + (i % BG_URLS.length),
+      opacity: 0.32,
     });
   }
   return defs;
@@ -89,13 +94,19 @@ function Plane({ def, tex }: { def: PlaneDef; tex: THREE.Texture }) {
   useFrame((state) => {
     if (!ref.current) return;
     const t = state.clock.elapsedTime;
-    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.07;
+    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.06;
   });
   return (
     <group position={def.pos} rotation={def.rot}>
-      <mesh ref={ref} scale={[3.5 * def.scale, 1.97 * def.scale, 1]}>
+      <mesh ref={ref} scale={[PLANE_W * def.scale, PLANE_H * def.scale, 1]}>
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial map={tex} toneMapped={false} side={THREE.DoubleSide} />
+        <meshBasicMaterial
+          map={tex}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+          transparent={def.opacity < 1}
+          opacity={def.opacity}
+        />
       </mesh>
     </group>
   );
@@ -126,9 +137,13 @@ function Dust() {
 }
 
 function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean }) {
+  const { viewport } = useThree();
   const defs = useMemo(
-    () => [...buildCorners(isMobile), ...buildDepth(depthCount)],
-    [depthCount, isMobile]
+    () => [
+      ...buildCorners(viewport.width / 2, viewport.height / 2, isMobile),
+      ...buildDepth(depthCount),
+    ],
+    [viewport.width, viewport.height, depthCount, isMobile]
   );
   const textures = useTexture(ALL_URLS);
   const mouse = useRef({ x: 0, y: 0 });
@@ -141,18 +156,16 @@ function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean
   }, [textures]);
 
   useFrame((state) => {
-    // gentle parallax only — camera never dollies forward, so scrolling
-    // just scrolls the page rather than flying through the scene
     mouse.current.x += (state.pointer.x - mouse.current.x) * 0.05;
     mouse.current.y += (state.pointer.y - mouse.current.y) * 0.05;
-    state.camera.position.x += (mouse.current.x * 0.55 - state.camera.position.x) * 0.05;
-    state.camera.position.y += (-mouse.current.y * 0.4 - state.camera.position.y) * 0.05;
+    state.camera.position.x += (mouse.current.x * 0.4 - state.camera.position.x) * 0.05;
+    state.camera.position.y += (-mouse.current.y * 0.3 - state.camera.position.y) * 0.05;
     state.camera.lookAt(0, 0, -12);
   });
 
   return (
     <>
-      <fog attach="fog" args={["#060607", 7, 20]} />
+      <fog attach="fog" args={["#060607", 6, 16]} />
       {defs.map((def, i) => (
         <Plane key={i} def={def} tex={(textures as THREE.Texture[])[def.tex]} />
       ))}
@@ -163,7 +176,7 @@ function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean
 
 export default function ThumbnailTunnel() {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const depthCount = isMobile ? 6 : 10;
+  const depthCount = isMobile ? 5 : 8;
   return (
     <Canvas
       dpr={[1, 1.75]}

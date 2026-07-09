@@ -57,6 +57,30 @@ export const STATS: Stat[] = [
   { value: 3, suffix: "+", label: "Years of Experience", height: 40 },
 ];
 
+export type Creator = {
+  slug: string;
+  name: string;
+  handle: string;
+  subs: string;
+  url: string;
+};
+
+export const CREATORS: Creator[] = [
+  { slug: "sypherpk", name: "SypherPK", handle: "@SypherPK", subs: "10.6M+", url: "https://www.youtube.com/@SypherPK" },
+  { slug: "kreekcraft", name: "KreekCraft", handle: "@KreekCraft", subs: "17M+", url: "https://www.youtube.com/@KreekCraft" },
+  { slug: "ishowspeed", name: "IShowSpeed", handle: "@LiveSpeedy", subs: "17.1M+", url: "https://www.youtube.com/@LiveSpeedy" },
+  { slug: "sketch", name: "Sketch", handle: "@TheSketchReal", subs: "800K+", url: "https://www.youtube.com/@TheSketchReal" },
+  { slug: "lacy", name: "Lacy", handle: "@LacyHimself", subs: "750K+", url: "https://www.youtube.com/@LacyHimself" },
+  { slug: "gavin-magnus", name: "Gavin Magnus", handle: "@LiveGavinMagnus", subs: "22.5K+", url: "https://www.youtube.com/@LiveGavinMagnus" },
+  { slug: "replays", name: "Replays", handle: "@ReplaysILY", subs: "1M+", url: "https://www.youtube.com/@ReplaysILY" },
+  { slug: "n3on", name: "N3ON", handle: "@N3on", subs: "1M+", url: "https://www.youtube.com/@N3on" },
+  { slug: "james-chugs", name: "James Chugs", handle: "@JamesChugs", subs: "1M+", url: "https://www.youtube.com/@JamesChugs" },
+  { slug: "extra-emily", name: "Extra Emily", handle: "@extraemily", subs: "300K+", url: "https://www.youtube.com/@extraemily" },
+  { slug: "yusuf7n", name: "Yusuf7n", handle: "@Yusuf7nLive", subs: "130K+", url: "https://www.youtube.com/@Yusuf7nLive" },
+  { slug: "biphilus30", name: "Biphilus30", handle: "@Biphilus30", subs: "130K+", url: "https://www.youtube.com/@Biphilus30" },
+  { slug: "joey773", name: "Joey773", handle: "@Joey773", subs: "100K+", url: "https://www.youtube.com/@Joey773" },
+];
+
 export const PROCESS = [
   {
     no: "01",

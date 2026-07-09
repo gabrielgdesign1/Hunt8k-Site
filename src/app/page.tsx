@@ -2,6 +2,7 @@ import Hero from "@/components/hero/Hero";
 import Work from "@/components/work/Work";
 import About from "@/components/About";
 import Stats from "@/components/Stats";
+import CreatorWheel from "@/components/CreatorWheel";
 import Process from "@/components/Process";
 import Testimonials from "@/components/Testimonials";
 import Faq from "@/components/Faq";
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <div className="relative z-10 bg-[var(--color-ink)]">
         <Stats />
+        <CreatorWheel />
         <Work />
         <About />
         <Process />
