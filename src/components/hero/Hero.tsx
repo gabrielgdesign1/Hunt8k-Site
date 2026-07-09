@@ -3,12 +3,21 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Lenis from "lenis";
 import { WORK, workSrc } from "@/lib/site";
 import { prefersReducedMotion, enableMotion } from "@/lib/motion";
 
 const ThumbnailTunnel = dynamic(() => import("./ThumbnailTunnel"), {
   ssr: false,
 });
+
+function scrollToContact() {
+  const el = document.querySelector("#contact") as HTMLElement | null;
+  if (!el) return;
+  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+  if (lenis) lenis.scrollTo(el, { offset: -20, duration: 1.4 });
+  else el.scrollIntoView({ behavior: "smooth" });
+}
 
 export default function Hero() {
   const [reduce, setReduce] = useState(false);
@@ -70,6 +79,34 @@ export default function Hero() {
             <span className="block text-[var(--color-bone)]">Turn Views Into</span>
             <span className="block text-[var(--color-red)]">Clicks.</span>
           </h1>
+
+          <button
+            onClick={scrollToContact}
+            className="group relative mt-9 overflow-hidden rounded-full px-9 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_30px_-6px_rgba(255,33,22,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-6px_rgba(255,33,22,0.8)] active:translate-y-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(180deg, #ff5a4d 0%, #ff2116 45%, #c40600 100%)",
+            }}
+          >
+            {/* top sheen */}
+            <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent" />
+            {/* inner border highlight */}
+            <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25" />
+            <span className="relative flex items-center gap-2">
+              Contact
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
     </section>

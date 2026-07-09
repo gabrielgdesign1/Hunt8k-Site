@@ -34,6 +34,7 @@ yarn-error.log*
 # source asset folders (raw designer exports — optimized copies live in /public)
 /Gaming thumbnails
 /IRL thumbnails
+/Hero section thumbnails
 /src/raw
 
 .vercel

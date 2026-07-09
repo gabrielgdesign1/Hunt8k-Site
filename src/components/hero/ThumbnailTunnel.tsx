@@ -4,9 +4,18 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { WORK, workSrc } from "@/lib/site";
 
-const URLS = WORK.map((w) => workSrc(w, true));
+// four "2x2" images for the foreground grid + three for the background
+const MAIN_URLS = [
+  "/hero/main-1.webp",
+  "/hero/main-2.webp",
+  "/hero/main-3.webp",
+  "/hero/main-4.webp",
+];
+const BG_URLS = ["/hero/bg-1.webp", "/hero/bg-2.webp", "/hero/bg-3.webp"];
+const ALL_URLS = [...MAIN_URLS, ...BG_URLS];
+const BG_OFFSET = MAIN_URLS.length;
+
 const STEP = 2.4;
 
 type PlaneDef = {
@@ -22,10 +31,10 @@ function rand(i: number) {
 }
 
 // the four foreground images, pinned one to each corner in a clean 2x2 grid.
-// kept fully within the frame — offsets + scale sized so no image clips the edge.
+// sized to sit fully inside the frame while staying prominent.
 function buildCorners(isMobile: boolean): PlaneDef[] {
-  const x = isMobile ? 1.25 : 2.35;
-  const y = isMobile ? 2.05 : 1.55;
+  const x = isMobile ? 1.3 : 2.55;
+  const y = isMobile ? 2.1 : 1.62;
   const corners: [number, number][] = [
     [-x, y], // top-left
     [x, y], // top-right
@@ -34,20 +43,20 @@ function buildCorners(isMobile: boolean): PlaneDef[] {
   ];
   const dummy = new THREE.Object3D();
   return corners.map(([px, py], i) => {
-    const z = i % 2 === 0 ? -0.4 : -1.1;
+    const z = i % 2 === 0 ? -0.4 : -1.0;
     dummy.position.set(px, py, z);
     dummy.lookAt(0, 0, z + 9);
     return {
       pos: [px, py, z],
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: isMobile ? 0.68 : 0.82,
-      tex: i % URLS.length,
+      scale: isMobile ? 0.74 : 0.92,
+      tex: i % MAIN_URLS.length,
     };
   });
 }
 
-// extra thumbnails receding further back, purely for ambient depth
-function buildDepth(count: number, texOffset: number): PlaneDef[] {
+// the three background images scattered further back, purely for ambient depth
+function buildDepth(count: number): PlaneDef[] {
   const dummy = new THREE.Object3D();
   const defs: PlaneDef[] = [];
   for (let i = 0; i < count; i++) {
@@ -68,7 +77,7 @@ function buildDepth(count: number, texOffset: number): PlaneDef[] {
       pos,
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
       scale: 0.75 + j * 0.3,
-      tex: (texOffset + i * 3 + slot) % URLS.length,
+      tex: BG_OFFSET + (i % BG_URLS.length),
     });
   }
   return defs;
@@ -118,10 +127,10 @@ function Dust() {
 
 function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean }) {
   const defs = useMemo(
-    () => [...buildCorners(isMobile), ...buildDepth(depthCount, 4)],
+    () => [...buildCorners(isMobile), ...buildDepth(depthCount)],
     [depthCount, isMobile]
   );
-  const textures = useTexture(URLS);
+  const textures = useTexture(ALL_URLS);
   const mouse = useRef({ x: 0, y: 0 });
 
   useMemo(() => {
