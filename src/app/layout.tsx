@@ -1,15 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Jersey_15, Inter, JetBrains_Mono } from "next/font/google";
+import { Paytone_One, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
-import Cursor from "@/components/ui/Cursor";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 
-const jersey = Jersey_15({
+const paytone = Paytone_One({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-jersey",
+  variable: "--font-paytone",
   display: "swap",
 });
 const inter = Inter({
@@ -54,11 +53,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jersey.variable} ${inter.variable} ${mono.variable}`}
+      className={`${paytone.variable} ${inter.variable} ${mono.variable}`}
     >
       <body className="grain antialiased">
         <Preloader />
-        <Cursor />
         <SmoothScroll>
           <Navbar />
           {children}

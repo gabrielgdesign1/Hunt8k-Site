@@ -36,15 +36,14 @@ export default function Navbar() {
           <button
             onClick={() => go("#top")}
             className="group flex items-center"
-            data-cursor="top"
           >
             <Image
               src="/branding/logo.png"
               alt="Hunt8K"
-              width={88}
-              height={52}
+              width={124}
+              height={73}
               priority
-              className="h-11 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_18px_rgba(255,33,22,0.7)]"
+              className="h-16 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_18px_rgba(255,33,22,0.7)]"
             />
           </button>
 

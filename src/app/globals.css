@@ -16,7 +16,7 @@
   --color-red-deep: #b00500;
   --color-red-blood: #7a0400;
 
-  --font-display: var(--font-jersey), "Arial Narrow", sans-serif;
+  --font-display: var(--font-paytone), "Arial Narrow", sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
 
@@ -44,13 +44,6 @@ body {
   color: var(--color-bone);
   font-family: var(--font-sans);
   overflow-x: clip;
-  cursor: none;
-}
-
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
 }
 
 ::selection {
@@ -76,8 +69,8 @@ html.lenis body {
 .font-display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 0.92;
+  letter-spacing: 0;
+  line-height: 0.95;
   text-transform: uppercase;
 }
 .font-mono {

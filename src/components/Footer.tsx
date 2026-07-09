@@ -44,7 +44,6 @@ export default function Footer() {
                 href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                data-cursor={s.label}
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-[var(--color-ash)] transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-red-bright)]"
               >
                 <SocialIcon icon={s.icon} className="h-4 w-4" />
@@ -54,7 +53,6 @@ export default function Footer() {
 
           <button
             onClick={toTop}
-            data-cursor="top"
             className="flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-[var(--color-ash)] transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-bone)]"
           >
             Back to top

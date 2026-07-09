@@ -42,19 +42,6 @@ export function workSrc(w: Work, texture = false) {
   return `/work/${w.category}/${w.slug}${texture ? "-tex" : ""}.webp`;
 }
 
-export const CLIENTS = [
-  "KreekCraft",
-  "Sketch",
-  "Jynxzi",
-  "Gavin Magnus",
-  "FaZe Replays",
-  "ChoiFN",
-  "Joey773",
-  "LiveSpeedy",
-  "Max",
-  "Piper Rockelle",
-];
-
 export const STATS = [
   { value: 900, suffix: "+", label: "Thumbnails Delivered" },
   { value: 250, suffix: "M+", label: "Views Generated" },

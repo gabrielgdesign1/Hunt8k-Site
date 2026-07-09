@@ -51,7 +51,6 @@ export default function Work() {
                 <button
                   key={f.key}
                   onClick={() => setFilter(f.key)}
-                  data-cursor="filter"
                   className={`rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                     filter === f.key
                       ? "border-[var(--color-red)] bg-[var(--color-red)] text-white"
@@ -80,7 +79,6 @@ export default function Work() {
                 exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.05, ease: [0.16, 1, 0.3, 1] }}
                 onClick={() => open(w)}
-                data-cursor="view"
                 className="group relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-[var(--color-ink-3)] text-left"
               >
                 <Image

@@ -1,5 +1,4 @@
 import Hero from "@/components/hero/Hero";
-import Marquee from "@/components/Marquee";
 import Work from "@/components/work/Work";
 import About from "@/components/About";
 import Stats from "@/components/Stats";
@@ -14,7 +13,6 @@ export default function Home() {
     <main className="relative">
       <Hero />
       <div className="relative z-10 bg-[var(--color-ink)]">
-        <Marquee />
         <Work />
         <About />
         <Stats />

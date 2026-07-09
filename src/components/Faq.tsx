@@ -39,7 +39,6 @@ export default function Faq() {
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="group flex w-full items-center justify-between gap-6 py-6 text-left"
-                  data-cursor={isOpen ? "close" : "open"}
                 >
                   <span className="font-display text-xl uppercase leading-tight transition-colors group-hover:text-[var(--color-red-bright)] md:text-2xl">
                     {item.q}

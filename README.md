@@ -4,11 +4,11 @@ A high-octane, red-themed portfolio for **Hunt8K**, a thumbnail designer for gam
 
 ## ✦ Highlights
 
-- **3D thumbnail tunnel hero** — the designer's work lines an infinite corridor that the camera flies through on scroll (React Three Fiber + WebGL).
-- **Scroll-driven storytelling** — Lenis smooth scroll + GSAP ScrollTrigger, Framer Motion reveals, animated process rail and count-up stats.
+- **3D hero visual** — four foreground thumbnails pinned to the corners in a 2x2 grid, with extra thumbnails receding into the background for depth (React Three Fiber + WebGL). Reacts to mouse parallax only — scrolling just scrolls the page normally.
+- **Scroll-driven storytelling** — Lenis smooth scroll, Framer Motion reveals, animated process rail and count-up stats.
 - **Interactive work gallery** — filterable (All / Gaming / IRL) with a full lightbox.
-- **Custom cursor, magnetic buttons, preloader, marquees, testimonials, FAQ, contact form.**
-- **Fully accessible** — every heavy animation has a `prefers-reduced-motion` fallback.
+- **Preloader, testimonials marquee, FAQ accordion, social links.**
+- **Fully accessible** — the 3D scene has a `prefers-reduced-motion` fallback (with an in-page opt-in toggle).
 
 ## 🛠 Stack
 
@@ -31,7 +31,7 @@ node scripts/optimize.mjs
 
 ## ⚙️ Customizing
 
-Almost all content lives in **`src/lib/site.ts`** — work items, testimonials, process, toolkit, FAQ, stats, socials and the contact email (`SITE.email`, currently a placeholder — update it).
+Almost all content lives in **`src/lib/site.ts`** — work items, testimonials, process, FAQ, stats, socials and the contact email (`SITE.email`, currently a placeholder — update it).
 
 ## 🎛 Motion override
 Append `?motion=on` to force the full animated experience, or `?motion=off` to preview the reduced-motion fallback.

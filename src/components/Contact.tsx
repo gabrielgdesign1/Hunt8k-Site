@@ -35,7 +35,6 @@ export default function Contact() {
             <Reveal i={3}>
               <a
                 href={`mailto:${SITE.email}`}
-                data-cursor="email"
                 className="group mt-9 flex w-fit items-center gap-4 text-lg text-[var(--color-bone)]"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 transition-colors group-hover:border-[var(--color-red)] group-hover:text-[var(--color-red)]">
@@ -55,7 +54,6 @@ export default function Contact() {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  data-cursor="open"
                   className="group flex items-center justify-between rounded-2xl border border-white/10 bg-[var(--color-ink-2)] px-6 py-5 transition-colors duration-300 hover:border-[var(--color-red)]/50"
                 >
                   <span className="flex items-center gap-4">

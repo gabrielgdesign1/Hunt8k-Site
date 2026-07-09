@@ -21,29 +21,53 @@ function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-function buildLayout(count: number): PlaneDef[] {
+// the four foreground images, pinned one to each corner in a clean 2x2 grid
+function buildCorners(isMobile: boolean): PlaneDef[] {
+  const x = isMobile ? 1.55 : 3.5;
+  const y = isMobile ? 2.6 : 2.1;
+  const corners: [number, number][] = [
+    [-x, y], // top-left
+    [x, y], // top-right
+    [-x, -y], // bottom-left
+    [x, -y], // bottom-right
+  ];
+  const dummy = new THREE.Object3D();
+  return corners.map(([px, py], i) => {
+    const z = i % 2 === 0 ? 0.5 : -0.3;
+    dummy.position.set(px, py, z);
+    dummy.lookAt(0, 0, z + 9);
+    return {
+      pos: [px, py, z],
+      rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
+      scale: isMobile ? 0.85 : 1.15,
+      tex: i % URLS.length,
+    };
+  });
+}
+
+// extra thumbnails receding further back, purely for ambient depth
+function buildDepth(count: number, texOffset: number): PlaneDef[] {
   const dummy = new THREE.Object3D();
   const defs: PlaneDef[] = [];
   for (let i = 0; i < count; i++) {
-    const z = 1 - i * STEP;
+    const z = -3 - i * STEP;
     const slot = i % 4;
-    const j = rand(i);
-    const k = rand(i + 99);
+    const j = rand(i + 500);
+    const k = rand(i + 700);
     let pos: [number, number, number];
-    if (slot === 0) pos = [-(3.2 + j * 0.9), -1.1 + k * 2.4, z]; // left wall
-    else if (slot === 1) pos = [3.2 + j * 0.9, 1.1 - k * 2.4, z]; // right wall
-    else if (slot === 2) pos = [-1.2 + k * 2.4, 2.3 + j * 0.7, z]; // ceiling
-    else pos = [1.2 - k * 2.4, -(2.3 + j * 0.7), z]; // floor
+    if (slot === 0) pos = [-(3.0 + j * 1.1), -1.0 + k * 2.2, z];
+    else if (slot === 1) pos = [3.0 + j * 1.1, 1.0 - k * 2.2, z];
+    else if (slot === 2) pos = [-1.0 + k * 2.2, 2.1 + j * 0.6, z];
+    else pos = [1.0 - k * 2.2, -(2.1 + j * 0.6), z];
 
-    // face a point ahead on the central axis so every image angles toward the viewer
     dummy.position.set(pos[0], pos[1], pos[2]);
     dummy.lookAt(0, 0, z + 9);
 
     defs.push({
       pos,
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: 0.95 + j * 0.5,
-      tex: (i * 5 + slot) % URLS.length,
+      scale: 0.75 + j * 0.3,
+      tex: (texOffset + i * 3 + slot) % URLS.length,
     });
   }
   return defs;
@@ -91,8 +115,11 @@ function Dust() {
   );
 }
 
-function Scene({ count }: { count: number }) {
-  const defs = useMemo(() => buildLayout(count), [count]);
+function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean }) {
+  const defs = useMemo(
+    () => [...buildCorners(isMobile), ...buildDepth(depthCount, 4)],
+    [depthCount, isMobile]
+  );
   const textures = useTexture(URLS);
   const mouse = useRef({ x: 0, y: 0 });
 
@@ -115,7 +142,7 @@ function Scene({ count }: { count: number }) {
 
   return (
     <>
-      <fog attach="fog" args={["#060607", 6, 22]} />
+      <fog attach="fog" args={["#060607", 7, 20]} />
       {defs.map((def, i) => (
         <Plane key={i} def={def} tex={(textures as THREE.Texture[])[def.tex]} />
       ))}
@@ -125,8 +152,8 @@ function Scene({ count }: { count: number }) {
 }
 
 export default function ThumbnailTunnel() {
-  const count =
-    typeof window !== "undefined" && window.innerWidth < 768 ? 10 : 16;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const depthCount = isMobile ? 6 : 10;
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -135,7 +162,7 @@ export default function ThumbnailTunnel() {
       className="!absolute inset-0"
     >
       <Suspense fallback={null}>
-        <Scene count={count} />
+        <Scene depthCount={depthCount} isMobile={isMobile} />
       </Suspense>
     </Canvas>
   );

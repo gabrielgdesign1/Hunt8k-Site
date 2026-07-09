@@ -60,7 +60,6 @@ export default function Hero() {
           {reduce && mounted && (
             <button
               onClick={enableMotion}
-              data-cursor="enable"
               className="mb-6 flex items-center gap-2 rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--color-red-bright)] transition-colors hover:bg-[var(--color-red)]/20"
             >
               ⚡ Reduced motion detected — tap to enable full animation
@@ -68,8 +67,8 @@ export default function Hero() {
           )}
 
           <h1 className="font-display display-hero text-balance">
-            <span className="block text-[var(--color-bone)]">Make Them</span>
-            <span className="block text-[var(--color-red)]">Click.</span>
+            <span className="block text-[var(--color-bone)]">Turn Views Into</span>
+            <span className="block text-[var(--color-red)]">Clicks.</span>
           </h1>
         </div>
       </div>
