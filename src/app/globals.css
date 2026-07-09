@@ -83,7 +83,7 @@ html.lenis body {
 
 /* Fluid display scale */
 .display-hero {
-  font-size: clamp(3.4rem, 13vw, 12rem);
+  font-size: clamp(2.6rem, 9vw, 7.5rem);
 }
 .display-xl {
   font-size: clamp(2.6rem, 8vw, 7rem);

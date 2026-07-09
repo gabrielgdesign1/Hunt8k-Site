@@ -21,10 +21,11 @@ function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-// the four foreground images, pinned one to each corner in a clean 2x2 grid
+// the four foreground images, pinned one to each corner in a clean 2x2 grid.
+// kept fully within the frame — offsets + scale sized so no image clips the edge.
 function buildCorners(isMobile: boolean): PlaneDef[] {
-  const x = isMobile ? 1.55 : 3.5;
-  const y = isMobile ? 2.6 : 2.1;
+  const x = isMobile ? 1.25 : 2.35;
+  const y = isMobile ? 2.05 : 1.55;
   const corners: [number, number][] = [
     [-x, y], // top-left
     [x, y], // top-right
@@ -33,13 +34,13 @@ function buildCorners(isMobile: boolean): PlaneDef[] {
   ];
   const dummy = new THREE.Object3D();
   return corners.map(([px, py], i) => {
-    const z = i % 2 === 0 ? 0.5 : -0.3;
+    const z = i % 2 === 0 ? -0.4 : -1.1;
     dummy.position.set(px, py, z);
     dummy.lookAt(0, 0, z + 9);
     return {
       pos: [px, py, z],
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: isMobile ? 0.85 : 1.15,
+      scale: isMobile ? 0.68 : 0.82,
       tex: i % URLS.length,
     };
   });
@@ -135,8 +136,8 @@ function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean
     // just scrolls the page rather than flying through the scene
     mouse.current.x += (state.pointer.x - mouse.current.x) * 0.05;
     mouse.current.y += (state.pointer.y - mouse.current.y) * 0.05;
-    state.camera.position.x += (mouse.current.x * 1.3 - state.camera.position.x) * 0.05;
-    state.camera.position.y += (-mouse.current.y * 0.9 - state.camera.position.y) * 0.05;
+    state.camera.position.x += (mouse.current.x * 0.55 - state.camera.position.x) * 0.05;
+    state.camera.position.y += (-mouse.current.y * 0.4 - state.camera.position.y) * 0.05;
     state.camera.lookAt(0, 0, -12);
   });
 

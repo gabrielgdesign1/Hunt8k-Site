@@ -42,11 +42,19 @@ export function workSrc(w: Work, texture = false) {
   return `/work/${w.category}/${w.slug}${texture ? "-tex" : ""}.webp`;
 }
 
-export const STATS = [
-  { value: 900, suffix: "+", label: "Thumbnails Delivered" },
-  { value: 250, suffix: "M+", label: "Views Generated" },
-  { value: 60, suffix: "+", label: "Creators Served" },
-  { value: 24, suffix: "h", label: "Avg. Turnaround" },
+export type Stat = {
+  value: number;
+  suffix: string;
+  label: string;
+  height: number; // relative bar height (0-100) for the chart
+  badge?: string;
+};
+
+export const STATS: Stat[] = [
+  { value: 500, suffix: "+", label: "Projects", height: 62 },
+  { value: 80, suffix: "M+", label: "Views", height: 100 },
+  { value: 50, suffix: "+", label: "Satisfied Clients", height: 76, badge: "Top Rated" },
+  { value: 3, suffix: "+", label: "Years of Experience", height: 40 },
 ];
 
 export const PROCESS = [

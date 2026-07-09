@@ -13,9 +13,9 @@ export default function Home() {
     <main className="relative">
       <Hero />
       <div className="relative z-10 bg-[var(--color-ink)]">
+        <Stats />
         <Work />
         <About />
-        <Stats />
         <Process />
         <Testimonials />
         <Faq />
