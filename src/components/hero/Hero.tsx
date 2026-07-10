@@ -82,7 +82,7 @@ export default function Hero() {
 
           <button
             onClick={scrollToContact}
-            className="group relative mt-9 overflow-hidden rounded-full px-9 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_30px_-6px_rgba(255,33,22,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-6px_rgba(255,33,22,0.8)] active:translate-y-0"
+            className="group relative mt-9 overflow-hidden rounded-full px-9 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
             style={{
               backgroundImage:
                 "linear-gradient(180deg, #ff5a4d 0%, #ff2116 45%, #c40600 100%)",

@@ -13,7 +13,7 @@ function toTop() {
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-white/[0.07] bg-[var(--color-ink-2)]">
+    <footer className="relative z-10 overflow-hidden bg-[var(--color-ink)]">
       {/* giant wordmark */}
       <div className="relative flex justify-center pt-16">
         <h2 className="font-display text-[22vw] leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.08)] select-none">

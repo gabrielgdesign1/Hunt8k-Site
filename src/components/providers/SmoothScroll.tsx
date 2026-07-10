@@ -15,6 +15,11 @@ export default function SmoothScroll({
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
+    // CSS-driven animations (wheel spin, marquees, etc.) are killed by the
+    // blanket prefers-reduced-motion rule in globals.css; this class lets
+    // an explicit "enable motion" opt-in (see lib/motion.ts) restore them.
+    document.documentElement.classList.toggle("motion-on", !reduce);
+
     gsap.registerPlugin(ScrollTrigger);
 
     if (reduce) {

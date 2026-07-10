@@ -19,6 +19,11 @@ const BG_OFFSET = MAIN_URLS.length;
 const PLANE_W = 3.5;
 const PLANE_H = 1.97;
 
+// max drift of the mouse-parallax camera — corner insets must exceed this
+// so no gap is ever revealed at the edges.
+const PARALLAX_X = 0.18;
+const PARALLAX_Y = 0.14;
+
 type PlaneDef = {
   pos: [number, number, number];
   rot: [number, number, number];
@@ -31,45 +36,49 @@ function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-// four foreground images, one per corner, sized to the viewport so they fill
-// the space as much as possible without ever clipping the edges.
-function buildCorners(halfW: number, halfH: number, isMobile: boolean): PlaneDef[] {
-  const scale = isMobile ? 0.82 : 1.06;
-  const planeHalfW = (PLANE_W * scale) / 2 * 0.95;
-  const planeHalfH = (PLANE_H * scale) / 2;
-  // keep a margin that also accounts for the mouse-parallax drift
-  const x = Math.max(planeHalfW * 0.35, halfW - planeHalfW - 0.55);
-  const y = Math.max(planeHalfH * 0.6, halfH - planeHalfH - 0.45);
+// four foreground images anchored near the real corners of the viewport and
+// sized to fill as much of the frame as possible, leaving a gap only in the
+// center cross where the headline sits.
+function buildCorners(vw: number, vh: number, isMobile: boolean): PlaneDef[] {
+  const coverW = isMobile ? 0.92 : 0.64;
+  const coverH = isMobile ? 0.3 : 0.58;
+  const scaleX = (vw * coverW) / PLANE_W;
+  const scaleY = (vh * coverH) / PLANE_H;
+  const scale = Math.min(scaleX, scaleY);
+
+  const halfImgW = (PLANE_W * scale) / 2;
+  const halfImgH = (PLANE_H * scale) / 2;
+  const insetX = Math.max(0.4, PARALLAX_X + 0.15);
+  const insetY = Math.max(0.35, PARALLAX_Y + 0.15);
+
+  const cx = Math.max(halfImgW * 0.5, vw / 2 - halfImgW - insetX);
+  const cy = Math.max(halfImgH * 0.5, vh / 2 - halfImgH - insetY);
+
   const corners: [number, number][] = [
-    [-x, y],
-    [x, y],
-    [-x, -y],
-    [x, -y],
+    [-cx, cy], // top-left
+    [cx, cy], // top-right
+    [-cx, -cy], // bottom-left
+    [cx, -cy], // bottom-right
   ];
-  const dummy = new THREE.Object3D();
-  return corners.map(([px, py], i) => {
-    const z = i % 2 === 0 ? -0.4 : -1.0;
-    dummy.position.set(px, py, z);
-    dummy.lookAt(0, 0, z + 9);
-    return {
-      pos: [px, py, z],
-      rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale,
-      tex: i % MAIN_URLS.length,
-      opacity: 1,
-    };
-  });
+  const tilts = [-2.5, 3, 2.4, -3.2]; // deg — subtle collage skew per image
+  return corners.map(([px, py], i) => ({
+    pos: [px, py, 0],
+    rot: [0, 0, (tilts[i] * Math.PI) / 180],
+    scale,
+    tex: i % MAIN_URLS.length,
+    opacity: 1,
+  }));
 }
 
 // the three background images clustered toward the CENTER, receding and faded —
-// depth that sits behind the headline, not directly behind the corner images.
+// depth that peeks through behind the headline, not behind the corner images.
 function buildDepth(count: number): PlaneDef[] {
   const dummy = new THREE.Object3D();
   const defs: PlaneDef[] = [];
   for (let i = 0; i < count; i++) {
     const z = -4.5 - i * 2.6;
     const angle = rand(i) * Math.PI * 2;
-    const r = 0.4 + rand(i + 21) * 1.7;
+    const r = 0.3 + rand(i + 21) * 1.3;
     const pos: [number, number, number] = [
       Math.cos(angle) * r,
       Math.sin(angle) * r * 0.7,
@@ -80,9 +89,9 @@ function buildDepth(count: number): PlaneDef[] {
     defs.push({
       pos,
       rot: [dummy.rotation.x, dummy.rotation.y, dummy.rotation.z],
-      scale: 0.6 + rand(i + 5) * 0.3,
+      scale: 0.55 + rand(i + 5) * 0.25,
       tex: BG_OFFSET + (i % BG_URLS.length),
-      opacity: 0.32,
+      opacity: 0.28,
     });
   }
   return defs;
@@ -90,11 +99,11 @@ function buildDepth(count: number): PlaneDef[] {
 
 function Plane({ def, tex }: { def: PlaneDef; tex: THREE.Texture }) {
   const ref = useRef<THREE.Mesh>(null);
-  const seed = useMemo(() => rand(def.pos[2]) * 10, [def.pos]);
+  const seed = useMemo(() => rand(def.pos[2] + def.pos[0]) * 10, [def.pos]);
   useFrame((state) => {
     if (!ref.current) return;
     const t = state.clock.elapsedTime;
-    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.06;
+    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.05;
   });
   return (
     <group position={def.pos} rotation={def.rot}>
@@ -140,7 +149,7 @@ function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean
   const { viewport } = useThree();
   const defs = useMemo(
     () => [
-      ...buildCorners(viewport.width / 2, viewport.height / 2, isMobile),
+      ...buildCorners(viewport.width, viewport.height, isMobile),
       ...buildDepth(depthCount),
     ],
     [viewport.width, viewport.height, depthCount, isMobile]
@@ -158,8 +167,8 @@ function Scene({ depthCount, isMobile }: { depthCount: number; isMobile: boolean
   useFrame((state) => {
     mouse.current.x += (state.pointer.x - mouse.current.x) * 0.05;
     mouse.current.y += (state.pointer.y - mouse.current.y) * 0.05;
-    state.camera.position.x += (mouse.current.x * 0.4 - state.camera.position.x) * 0.05;
-    state.camera.position.y += (-mouse.current.y * 0.3 - state.camera.position.y) * 0.05;
+    state.camera.position.x += (mouse.current.x * PARALLAX_X - state.camera.position.x) * 0.05;
+    state.camera.position.y += (-mouse.current.y * PARALLAX_Y - state.camera.position.y) * 0.05;
     state.camera.lookAt(0, 0, -12);
   });
 

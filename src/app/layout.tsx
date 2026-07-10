@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Paytone_One, Inter, JetBrains_Mono } from "next/font/google";
+import { Tilt_Warp, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 
-const paytone = Paytone_One({
+const tiltWarp = Tilt_Warp({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-paytone",
+  variable: "--font-tilt-warp",
   display: "swap",
 });
 const inter = Inter({
@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${paytone.variable} ${inter.variable} ${mono.variable}`}
+      className={`${tiltWarp.variable} ${inter.variable} ${mono.variable}`}
     >
       <body className="grain antialiased">
         <Preloader />

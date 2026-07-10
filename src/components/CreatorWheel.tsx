@@ -42,7 +42,7 @@ export default function CreatorWheel() {
   return (
     <section
       id="creators"
-      className="relative z-10 overflow-hidden border-b border-white/[0.07] py-24 md:py-32"
+      className="relative z-10 overflow-hidden py-24 md:py-32"
     >
       {/* ambient glow */}
       <div className="pointer-events-none absolute right-[-10%] top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,33,22,0.16),transparent_65%)] blur-2xl" />
@@ -61,8 +61,10 @@ export default function CreatorWheel() {
           </Reveal>
           <Reveal i={2}>
             <p className="mt-5 max-w-md text-[var(--color-ash)]">
-              {CREATORS.length} creators and counting — from rising channels to
-              multi-million subscriber names across Fortnite and IRL content.
+              I have worked with numerous creators in all kinds of niches,
+              from rising creators to multi-million subscriber channels
+              across all types of niches like gaming, IRL, and everything in
+              between.
             </p>
           </Reveal>
 
@@ -160,7 +162,7 @@ export default function CreatorWheel() {
             {/* rotating ring of avatars */}
             <div
               className="absolute inset-0"
-              style={{ animation: "spin-slow 48s linear infinite" }}
+              style={{ animation: "spin-slow 22s linear infinite" }}
             >
               {nodes.map((node) => {
                 const isActive = node.i === active;
@@ -179,7 +181,7 @@ export default function CreatorWheel() {
                     {/* counter-rotate so photos stay upright while orbiting */}
                     <div
                       className="h-full w-full"
-                      style={{ animation: "spin-slow 48s linear infinite reverse" }}
+                      style={{ animation: "spin-slow 22s linear infinite reverse" }}
                     >
                       <button
                         onClick={() => setActive(node.i)}

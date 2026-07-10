@@ -16,7 +16,7 @@
   --color-red-deep: #b00500;
   --color-red-blood: #7a0400;
 
-  --font-display: var(--font-paytone), "Arial Narrow", sans-serif;
+  --font-display: var(--font-tilt-warp), "Arial Narrow", sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
 
@@ -142,8 +142,11 @@ html.lenis body {
   height: 0;
 }
 
+/* :not(.motion-on) so an explicit "enable motion" opt-in (see lib/motion.ts)
+   can restore CSS-driven animations even when the OS/browser prefers
+   reduced motion — the rule simply doesn't match at all in that case. */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  :root:not(.motion-on) * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }

@@ -85,7 +85,7 @@ export default function Stats() {
   return (
     <section
       id="stats"
-      className="relative z-10 overflow-hidden border-b border-white/[0.07] bg-[var(--color-ink)] py-24 md:py-32"
+      className="relative z-10 overflow-hidden bg-[var(--color-ink)] py-24 md:py-32"
     >
       {/* radial red glow backdrop */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_78%,rgba(255,33,22,0.22),transparent_65%)]" />
@@ -106,8 +106,8 @@ export default function Stats() {
           </div>
           <Reveal i={2}>
             <p className="max-w-sm text-[var(--color-ash)]">
-              A few years of packaging videos for creators — and the numbers to
-              back it up.
+              Don&apos;t take my word for it, the results speak for
+              themselves…
             </p>
           </Reveal>
         </div>
