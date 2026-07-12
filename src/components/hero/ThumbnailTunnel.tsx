@@ -36,23 +36,39 @@ function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-// four foreground images anchored near the real corners of the viewport and
-// sized to fill as much of the frame as possible, leaving a gap only in the
-// center cross where the headline sits.
+// four foreground images anchored near the real corners of the viewport.
+// A gap of a fixed FRACTION of the viewport is reserved down the center
+// (both axes) for the headline; each image is then contain-fit into its
+// own quadrant box, so — unlike a naive "cover" fit — the center gap is
+// guaranteed and never overlapped, regardless of the viewport's aspect
+// ratio (this previously broke on wide desktop screens).
 function buildCorners(vw: number, vh: number, isMobile: boolean): PlaneDef[] {
-  const coverW = isMobile ? 0.92 : 0.64;
-  const coverH = isMobile ? 0.3 : 0.58;
-  const scaleX = (vw * coverW) / PLANE_W;
-  const scaleY = (vh * coverH) / PLANE_H;
-  const scale = Math.min(scaleX, scaleY);
+  const gapWFrac = isMobile ? 0.16 : 0.32;
+  const gapHFrac = isMobile ? 0.24 : 0.34;
 
+  const gapW = vw * gapWFrac;
+  const gapH = vh * gapHFrac;
+  const availW = (vw - gapW) / 2;
+  const availH = (vh - gapH) / 2;
+
+  // exact contain-fit within the quadrant box — guarantees the image never
+  // crosses into the center gap, whatever the viewport's aspect ratio
+  const scale = Math.min(availW / PLANE_W, availH / PLANE_H);
   const halfImgW = (PLANE_W * scale) / 2;
   const halfImgH = (PLANE_H * scale) / 2;
-  const insetX = Math.max(0.4, PARALLAX_X + 0.15);
-  const insetY = Math.max(0.35, PARALLAX_Y + 0.15);
 
-  const cx = Math.max(halfImgW * 0.5, vw / 2 - halfImgW - insetX);
-  const cy = Math.max(halfImgH * 0.5, vh / 2 - halfImgH - insetY);
+  // position so BOTH edges clear the mouse-parallax drift: the outer edge
+  // must reach past the true viewport edge, and the inner edge must stay
+  // clear of the center gap — take whichever position satisfies the more
+  // demanding of the two, independent of which axis the scale was bound by
+  const cx = Math.max(
+    vw / 2 + PARALLAX_X - halfImgW,
+    gapW / 2 + PARALLAX_X + halfImgW
+  );
+  const cy = Math.max(
+    vh / 2 + PARALLAX_Y - halfImgH,
+    gapH / 2 + PARALLAX_Y + halfImgH
+  );
 
   const corners: [number, number][] = [
     [-cx, cy], // top-left
