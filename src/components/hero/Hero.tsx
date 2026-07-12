@@ -56,12 +56,12 @@ export default function Hero() {
         )}
 
         {/* vignette + gradient wash — darkest through the center so text stays readable */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,6,7,0.6)_0%,rgba(6,6,7,0.35)_38%,rgba(6,6,7,0.75)_72%,rgba(6,6,7,0.97)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,6,7,0.72)_0%,rgba(6,6,7,0.5)_34%,rgba(6,6,7,0.78)_70%,rgba(6,6,7,0.97)_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--color-ink)] to-transparent" />
 
         {/* dedicated contrast plate directly behind the headline block */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-[85%] w-[94%] max-w-3xl rounded-[4rem] bg-[var(--color-ink)]/65 blur-3xl" />
+          <div className="h-[70%] w-[80%] max-w-3xl rounded-[50%] bg-[var(--color-ink)]/80 blur-3xl" />
         </div>
 
         {/* overlay content */}
