@@ -2,28 +2,120 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-const MAIN_URLS = [
-  "/hero/main-1.webp",
-  "/hero/main-2.webp",
-  "/hero/main-3.webp",
-  "/hero/main-4.webp",
+/* ------------------------------------------------------------------ */
+/*  TEXTURES                                                           */
+/* ------------------------------------------------------------------ */
+// One unique image per plane — repeats were the main reason the old
+// arrangement read as a jumbled mosaic. The curated hero shots carry the
+// foreground; work thumbnails (already optimised as small -tex files) fill
+// the mid and back layers.
+const HERO_URLS = [
+  "/hero/main-1.webp", // 0
+  "/hero/main-2.webp", // 1
+  "/hero/main-3.webp", // 2
+  "/hero/main-4.webp", // 3
+  "/hero/bg-1.webp", // 4
+  "/hero/bg-2.webp", // 5
+  "/hero/bg-3.webp", // 6
 ];
-const BG_URLS = ["/hero/bg-1.webp", "/hero/bg-2.webp", "/hero/bg-3.webp"];
-const ALL_URLS = [...MAIN_URLS, ...BG_URLS];
+const WORK_URLS = [
+  "/work/gaming/black-ops-7-tex.webp", // 7
+  "/work/irl/sketch-jynxzi-madden-tex.webp", // 8
+  "/work/gaming/kreekcraft-roblox-tex.webp", // 9
+  "/work/irl/gavin-magnus-car-tex.webp", // 10
+  "/work/gaming/faze-replays-simpson-tex.webp", // 11
+  "/work/irl/max-reaction-tex.webp", // 12
+];
+const ALL_URLS = [...HERO_URLS, ...WORK_URLS];
 
 const PLANE_W = 3.5;
-const PLANE_H = 1.97;
+const PLANE_H = 1.97; // 16:9
 
-const PARALLAX_X = 0.16;
-const PARALLAX_Y = 0.12;
+const CAM_Z = 6;
+const PARALLAX_X = 0.5;
+const PARALLAX_Y = 0.34;
+
+/* ------------------------------------------------------------------ */
+/*  LAYOUT                                                             */
+/* ------------------------------------------------------------------ */
+// Each card is authored in SCREEN space and then projected onto its own
+// depth plane, so `z` never shifts a card off its intended spot — it only
+// buys the things that actually read as depth:
+//   • mouse parallax (near cards swing further than far ones)
+//   • fog fade toward the ink background
+//   • dimming/darkening of the back layer
+//
+//  wFrac   card width as a fraction of the viewport width
+//  fx/fy   centre position as a fraction of the half-viewport (-1…1)
+//  rot     tilt in degrees
+//  z       depth: > 0 is toward the camera, < 0 is away from it
+//  tex     index into ALL_URLS
+//  opacity 1 = crisp foreground, < 1 = faded depth behind the headline
+type Scatter = {
+  wFrac: number;
+  fx: number;
+  fy: number;
+  rot: number;
+  z: number;
+  tex: number;
+  opacity: number;
+};
+
+const Z_FRONT = 1.5;
+const Z_SIDE = 0.8;
+const Z_MID = 0;
+const Z_BACK = -4;
+
+const SCATTER: Scatter[] = [
+  // ---- FRONT: big corner cards, bleeding off the edges so they read as
+  //      the closest thing to the viewer.
+  { wFrac: 0.24, fx: -0.87, fy: 0.6, rot: -7, z: Z_FRONT, tex: 0, opacity: 1 },
+  { wFrac: 0.23, fx: 0.86, fy: 0.63, rot: 6, z: Z_FRONT, tex: 1, opacity: 1 },
+  { wFrac: 0.24, fx: -0.89, fy: -0.63, rot: 5, z: Z_FRONT, tex: 2, opacity: 1 },
+  { wFrac: 0.23, fx: 0.87, fy: -0.66, rot: -6, z: Z_FRONT, tex: 3, opacity: 1 },
+
+  // ---- SIDES: smaller cards plugging the vertical gap between the corners.
+  { wFrac: 0.16, fx: -0.97, fy: 0.0, rot: 8, z: Z_SIDE, tex: 8, opacity: 1 },
+  { wFrac: 0.16, fx: 0.99, fy: -0.03, rot: -8, z: Z_SIDE, tex: 9, opacity: 1 },
+
+  // ---- MID: top & bottom edge cards, one step back from the corners.
+  { wFrac: 0.19, fx: -0.30, fy: 0.86, rot: 4, z: Z_MID, tex: 4, opacity: 1 },
+  { wFrac: 0.18, fx: 0.30, fy: 0.9, rot: -5, z: Z_MID, tex: 5, opacity: 1 },
+  { wFrac: 0.19, fx: -0.28, fy: -0.88, rot: -4, z: Z_MID, tex: 6, opacity: 1 },
+  { wFrac: 0.18, fx: 0.32, fy: -0.86, rot: 5, z: Z_MID, tex: 7, opacity: 1 },
+
+  // ---- BACK: dim, fogged cards drifting behind the headline. These are what
+  //      give the composition its sense of distance — never fully readable.
+  { wFrac: 0.22, fx: -0.44, fy: 0.24, rot: 9, z: Z_BACK, tex: 10, opacity: 0.52 },
+  { wFrac: 0.21, fx: 0.48, fy: -0.22, rot: -8, z: Z_BACK, tex: 11, opacity: 0.52 },
+  { wFrac: 0.18, fx: 0.04, fy: 0.36, rot: 5, z: Z_BACK - 1.2, tex: 12, opacity: 0.4 },
+];
+
+// Portrait phones are tall and narrow, so 16:9 cards cover very little
+// height. Fewer, much wider cards stacked top and bottom, with the centre
+// band left to the dim back layer so the headline stays readable.
+const SCATTER_MOBILE: Scatter[] = [
+  // The inner pair sits one tier back so that where it meets the outer pair
+  // it tucks *behind* it — on a narrow screen cards have to touch, and
+  // stacking them across depths is what stops that reading as a blob.
+  { wFrac: 0.62, fx: -0.42, fy: 0.8, rot: -5, z: Z_FRONT, tex: 0, opacity: 1 },
+  { wFrac: 0.6, fx: 0.46, fy: 0.52, rot: 6, z: Z_SIDE, tex: 1, opacity: 1 },
+  { wFrac: 0.6, fx: -0.4, fy: -0.52, rot: 5, z: Z_SIDE, tex: 2, opacity: 1 },
+  { wFrac: 0.62, fx: 0.44, fy: -0.8, rot: -5, z: Z_FRONT, tex: 3, opacity: 1 },
+  { wFrac: 0.5, fx: 0.52, fy: 0.98, rot: 4, z: Z_MID, tex: 4, opacity: 1 },
+  { wFrac: 0.5, fx: -0.5, fy: -0.98, rot: -4, z: Z_MID, tex: 6, opacity: 1 },
+  { wFrac: 0.72, fx: -0.06, fy: 0.2, rot: 4, z: Z_BACK, tex: 10, opacity: 0.32 },
+  { wFrac: 0.72, fx: 0.08, fy: -0.2, rot: -4, z: Z_BACK, tex: 11, opacity: 0.32 },
+];
 
 type PlaneDef = {
   pos: [number, number, number];
   rot: [number, number, number];
   scale: number;
+  depthK: number;
   tex: number;
   opacity: number;
 };
@@ -32,85 +124,75 @@ function rand(i: number) {
   return Math.abs((Math.sin(i * 127.1 + 311.7) * 43758.5453) % 1);
 }
 
-// A curated, scattered collage. Positions are fractions of the half-viewport
-// (fx/fy in -1..1) and each image's width is a fraction of the viewport width
-// (wFrac), so the montage scales with any aspect ratio. The headline is an
-// HTML overlay drawn ON TOP of this canvas, so images can freely fill the
-// whole frame — a strong center scrim (in Hero.tsx) keeps the text readable.
-type Scatter = {
-  wFrac: number;
-  fx: number;
-  fy: number;
-  rot: number;
-  tex: number;
-  opacity: number;
-};
-
-const SCATTER: Scatter[] = [
-  // bold corner pieces
-  { wFrac: 0.38, fx: -0.56, fy: 0.52, rot: -5, tex: 0, opacity: 1 },
-  { wFrac: 0.36, fx: 0.6, fy: 0.56, rot: 6, tex: 1, opacity: 1 },
-  { wFrac: 0.35, fx: -0.6, fy: -0.54, rot: 4, tex: 2, opacity: 1 },
-  { wFrac: 0.38, fx: 0.58, fy: -0.52, rot: -6, tex: 3, opacity: 1 },
-  // top/bottom + side edge fillers
-  { wFrac: 0.26, fx: 0.03, fy: 0.86, rot: 3, tex: 4, opacity: 1 },
-  { wFrac: 0.26, fx: -0.04, fy: -0.9, rot: -3, tex: 5, opacity: 1 },
-  { wFrac: 0.24, fx: -0.9, fy: 0.02, rot: -7, tex: 6, opacity: 1 },
-  { wFrac: 0.24, fx: 0.92, fy: -0.05, rot: 7, tex: 0, opacity: 1 },
-  // mid pieces closing the inner gaps
-  { wFrac: 0.22, fx: 0.44, fy: 0.1, rot: -8, tex: 1, opacity: 1 },
-  { wFrac: 0.22, fx: -0.46, fy: -0.12, rot: 8, tex: 2, opacity: 1 },
-  // faded pieces sitting behind the headline for depth
-  { wFrac: 0.28, fx: -0.18, fy: 0.05, rot: 6, tex: 3, opacity: 0.3 },
-  { wFrac: 0.28, fx: 0.2, fy: -0.08, rot: -6, tex: 5, opacity: 0.3 },
-];
-
-// portrait phones are tall + narrow: use big images stacked top & bottom
-// (16:9 images barely cover height otherwise), keeping the vertical center
-// band lighter so the headline stays readable.
-const SCATTER_MOBILE: Scatter[] = [
-  { wFrac: 0.92, fx: -0.1, fy: 0.78, rot: -4, tex: 0, opacity: 1 },
-  { wFrac: 0.85, fx: 0.16, fy: 0.46, rot: 5, tex: 1, opacity: 1 },
-  { wFrac: 0.88, fx: 0.12, fy: -0.46, rot: 4, tex: 2, opacity: 1 },
-  { wFrac: 0.92, fx: -0.12, fy: -0.78, rot: -5, tex: 3, opacity: 1 },
-  { wFrac: 0.8, fx: -0.05, fy: 0.16, rot: 3, tex: 4, opacity: 0.55 },
-  { wFrac: 0.8, fx: 0.06, fy: -0.16, rot: -3, tex: 5, opacity: 0.55 },
-];
-
 function buildScatter(vw: number, vh: number, isMobile: boolean): PlaneDef[] {
   const set = isMobile ? SCATTER_MOBILE : SCATTER;
   return set.map((s) => {
-    const scale = (vw * s.wFrac) / PLANE_W;
+    // `vw`/`vh` describe the frustum at z = 0. A plane sitting at depth `z`
+    // is (CAM_Z - z) away, so everything about it — position and size — has
+    // to be scaled by `k` to land on the same spot on screen.
+    const k = (CAM_Z - s.z) / CAM_Z;
     return {
-      pos: [s.fx * (vw / 2), s.fy * (vh / 2), s.opacity < 1 ? -1 : 0],
+      pos: [s.fx * (vw / 2) * k, s.fy * (vh / 2) * k, s.z],
       rot: [0, 0, (s.rot * Math.PI) / 180],
-      scale,
+      scale: (vw * s.wFrac * k) / PLANE_W,
+      depthK: k,
       tex: s.tex,
       opacity: s.opacity,
     };
   });
 }
 
+/* ------------------------------------------------------------------ */
+/*  PLANES                                                             */
+/* ------------------------------------------------------------------ */
 function Plane({ def, tex }: { def: PlaneDef; tex: THREE.Texture }) {
-  const ref = useRef<THREE.Mesh>(null);
+  const ref = useRef<THREE.Group>(null);
   const seed = useMemo(() => rand(def.pos[0] * 3.7 + def.pos[1]) * 10, [def.pos]);
+  const w = PLANE_W * def.scale;
+  const h = PLANE_H * def.scale;
+  const solid = def.opacity >= 1;
+
   useFrame((state) => {
     if (!ref.current) return;
     const t = state.clock.elapsedTime;
-    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.05;
+    // Drift in world units scaled by depth, so every card appears to move
+    // the same small amount on screen no matter how far back it sits.
+    ref.current.position.y = Math.sin(t * 0.4 + seed) * 0.06 * def.depthK;
+    ref.current.position.x = Math.cos(t * 0.29 + seed * 1.7) * 0.04 * def.depthK;
+    ref.current.rotation.z = Math.sin(t * 0.23 + seed) * 0.007;
   });
+
   return (
     <group position={def.pos} rotation={def.rot}>
-      <mesh ref={ref} scale={[PLANE_W * def.scale, PLANE_H * def.scale, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial
-          map={tex}
-          toneMapped={false}
-          side={THREE.DoubleSide}
-          transparent={def.opacity < 1}
-          opacity={def.opacity}
-        />
-      </mesh>
+      <group ref={ref}>
+        {/* A slightly oversized black card behind each solid image reads as a
+            drop shadow — it keeps neighbouring thumbnails from melting into
+            one another wherever they do overlap. */}
+        {solid && (
+          <mesh position={[0, 0, -0.01]} scale={[w * 1.035, h * 1.05, 1]}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              color="#000000"
+              transparent
+              opacity={0.6}
+              depthWrite={false}
+            />
+          </mesh>
+        )}
+        <mesh scale={[w, h, 1]}>
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial
+            map={tex}
+            toneMapped={false}
+            transparent={!solid}
+            opacity={def.opacity}
+            depthWrite={solid}
+            // Push the back layer down toward the ink so it sits behind the
+            // headline instead of competing with it.
+            color={solid ? "#ffffff" : "#b4b4bd"}
+          />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -158,14 +240,18 @@ function Scene({ isMobile }: { isMobile: boolean }) {
   useFrame((state) => {
     mouse.current.x += (state.pointer.x - mouse.current.x) * 0.05;
     mouse.current.y += (state.pointer.y - mouse.current.y) * 0.05;
-    state.camera.position.x += (mouse.current.x * PARALLAX_X - state.camera.position.x) * 0.05;
-    state.camera.position.y += (-mouse.current.y * PARALLAX_Y - state.camera.position.y) * 0.05;
+    state.camera.position.x +=
+      (mouse.current.x * PARALLAX_X - state.camera.position.x) * 0.05;
+    state.camera.position.y +=
+      (-mouse.current.y * PARALLAX_Y - state.camera.position.y) * 0.05;
     state.camera.lookAt(0, 0, -10);
   });
 
   return (
     <>
-      <fog attach="fog" args={["#060607", 7, 18]} />
+      {/* Reaches the back layer (~10 units out) but leaves the front and mid
+          cards untouched, so distance alone desaturates the depth. */}
+      <fog attach="fog" args={["#060607", 6.5, 16]} />
       {defs.map((def, i) => (
         <Plane key={i} def={def} tex={(textures as THREE.Texture[])[def.tex]} />
       ))}
@@ -175,12 +261,22 @@ function Scene({ isMobile }: { isMobile: boolean }) {
 }
 
 export default function ThumbnailTunnel() {
-  const isMobile =
-    typeof window !== "undefined" && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <Canvas
       dpr={[1, 1.75]}
-      camera={{ position: [0, 0, 6], fov: 68 }}
+      camera={{ position: [0, 0, CAM_Z], fov: 68 }}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       className="!absolute inset-0"
     >

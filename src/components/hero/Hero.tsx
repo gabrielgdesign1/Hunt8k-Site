@@ -55,14 +55,14 @@ export default function Hero() {
           </div>
         )}
 
-        {/* vignette + gradient wash — darkest through the center so text stays readable */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,6,7,0.72)_0%,rgba(6,6,7,0.5)_34%,rgba(6,6,7,0.78)_70%,rgba(6,6,7,0.97)_100%)]" />
+        {/* vignette — light through the collage, heavier at the edges so the
+            corner cards fall away into the ink */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,6,7,0.28)_0%,rgba(6,6,7,0.34)_45%,rgba(6,6,7,0.72)_78%,rgba(6,6,7,0.96)_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--color-ink)] to-transparent" />
 
-        {/* dedicated contrast plate directly behind the headline block */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-[70%] w-[80%] max-w-3xl rounded-[50%] bg-[var(--color-ink)]/80 blur-3xl" />
-        </div>
+        {/* contrast pool behind the headline — a gradient that fades fully to
+            transparent, so it never shows an edge over the collage */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_46%_at_50%_46%,rgba(6,6,7,0.9)_0%,rgba(6,6,7,0.72)_38%,rgba(6,6,7,0.34)_66%,rgba(6,6,7,0)_100%)]" />
 
         {/* overlay content */}
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
