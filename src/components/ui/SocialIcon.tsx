@@ -1,4 +1,4 @@
-export type SocialKey = "x" | "instagram" | "behance";
+export type SocialKey = "x" | "instagram" | "behance" | "youtube";
 
 export default function SocialIcon({
   icon,
@@ -26,6 +26,24 @@ export default function SocialIcon({
           <rect x="3" y="3" width="18" height="18" rx="5.5" />
           <circle cx="12" cy="12" r="4.1" />
           <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "youtube":
+      // Outlined to match the Instagram mark rather than the solid glyph.
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className={className}
+        >
+          <rect x="2" y="5" width="20" height="14" rx="4.2" />
+          <path
+            d="M10.4 9.2v5.6l4.9-2.8-4.9-2.8Z"
+            fill="currentColor"
+            stroke="none"
+          />
         </svg>
       );
     case "behance":
