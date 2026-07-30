@@ -22,7 +22,7 @@ export default function About() {
         <div className="relative order-2 md:order-1">
           <motion.div
             style={{ y: glowY }}
-            className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(circle,rgba(255,33,22,0.35),transparent_60%)] blur-2xl"
+            className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(circle,rgba(228,0,1,0.35),transparent_60%)] blur-2xl"
           />
           <motion.div style={{ y }} className="relative">
             <Image

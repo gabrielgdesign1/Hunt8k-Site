@@ -216,7 +216,7 @@ function Dust() {
   });
   return (
     <points ref={ref} geometry={geo}>
-      <pointsMaterial size={0.04} color="#ff5a4d" transparent opacity={0.45} />
+      <pointsMaterial size={0.04} color="#ff2424" transparent opacity={0.45} />
     </points>
   );
 }

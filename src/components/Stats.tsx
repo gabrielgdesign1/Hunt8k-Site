@@ -60,7 +60,7 @@ const COLUMNS: Col[] = [
 ];
 
 const barGradient =
-  "linear-gradient(to top, #a60400 0%, #ff2116 45%, #ff7a6e 100%)";
+  "linear-gradient(to top, #420101 0%, #e40001 45%, #ff6b6b 100%)";
 
 export default function Stats() {
   const ref = useRef<HTMLDivElement>(null);
@@ -88,7 +88,7 @@ export default function Stats() {
       className="relative z-10 overflow-hidden py-24 md:py-32"
     >
       {/* radial red glow backdrop */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_78%,rgba(255,33,22,0.22),transparent_65%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_78%,rgba(228,0,1,0.22),transparent_65%)]" />
 
       <div className="relative mx-auto max-w-[1400px] px-5 md:px-8">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -115,7 +115,7 @@ export default function Stats() {
         {/* chart */}
         <div ref={ref} className="relative pb-16">
           {/* glowing reflection band at the baseline */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-16 h-24 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(255,60,45,0.35),transparent_70%)] blur-lg" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-16 h-24 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(255,36,36,0.35),transparent_70%)] blur-lg" />
 
           {/* bars */}
           <div className="relative flex h-[300px] items-end justify-center gap-2 sm:gap-4 md:h-[380px]">
@@ -131,7 +131,7 @@ export default function Stats() {
                       delay: 0.1 + i * 0.05,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="w-2 shrink-0 rounded-full opacity-60 shadow-[0_0_14px_rgba(255,40,30,0.5)] sm:w-3"
+                    className="w-2 shrink-0 rounded-full opacity-60 shadow-[0_0_14px_rgba(255,36,36,0.5)] sm:w-3"
                     style={{ backgroundImage: barGradient }}
                   />
                 );
@@ -147,7 +147,7 @@ export default function Stats() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={inView ? { opacity: 1, y: 0 } : {}}
                       transition={{ delay: 1, duration: 0.5 }}
-                      className="mb-2 flex items-center gap-1 whitespace-nowrap rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/20 px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.12em] text-[var(--color-red-bright)] shadow-[0_0_16px_rgba(255,40,30,0.5)] sm:text-[10px]"
+                      className="mb-2 flex items-center gap-1 whitespace-nowrap rounded-full border border-[var(--color-red)]/50 bg-[var(--color-red)]/20 px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.12em] text-[var(--color-red-bright)] shadow-[0_0_16px_rgba(255,36,36,0.5)] sm:text-[10px]"
                     >
                       <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 7.1-1z" />
@@ -156,7 +156,7 @@ export default function Stats() {
                     </motion.div>
                   )}
 
-                  <div className="mb-3 font-display text-2xl leading-none text-[var(--color-bone)] drop-shadow-[0_0_12px_rgba(255,40,30,0.5)] sm:text-4xl md:text-5xl">
+                  <div className="mb-3 font-display text-2xl leading-none text-[var(--color-bone)] drop-shadow-[0_0_12px_rgba(255,36,36,0.5)] sm:text-4xl md:text-5xl">
                     <Counter value={s.value} suffix={s.suffix} run={inView} />
                   </div>
 
@@ -168,7 +168,7 @@ export default function Stats() {
                       delay: 0.2 + col.idx * 0.12,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="relative w-full max-w-[70px] overflow-hidden rounded-full shadow-[0_0_28px_rgba(255,40,30,0.6)]"
+                    className="relative w-full max-w-[70px] overflow-hidden rounded-full shadow-[0_0_28px_rgba(255,36,36,0.6)]"
                     style={{ backgroundImage: barGradient }}
                   >
                     <span className="absolute inset-y-0 left-1/2 w-1/3 -translate-x-1/2 bg-white/25 blur-[2px]" />

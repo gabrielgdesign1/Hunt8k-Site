@@ -33,6 +33,19 @@ step needed.
 - **Lenis** — smooth scrolling
 - **sharp** — build-time image optimization (dev dependency)
 
+### Brand colours
+
+Defined as Tailwind v4 tokens in `src/app/globals.css`:
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--color-red` | `#e40001` | The brand red — accents, stars, borders, glows |
+| `--color-red-deep` | `#420101` | The dark brand red — gradient floors |
+| `--color-red-bright` | `#ff2424` | Lighter tint of `--color-red`, for small mono labels and hover states (`#e40001` alone is only ~4.1:1 on the ink background, which fails AA at small sizes) |
+
+Some reds are still inline `rgba(228, 0, 1, …)` for glows and gradients — grep
+that string when re-theming, not just the tokens.
+
 ### Fonts
 - **Display / headings:** Tilt Warp (`--font-tilt-warp`)
 - **Body:** Inter
@@ -78,8 +91,8 @@ Rendered in this order (see `src/app/page.tsx`):
    hover zoom + red ring, "50M+ combined subscribers" metric.
 5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL) with a full
    lightbox (prev/next).
-6. **Testimonials** (`#reviews`) — heading "Reviews."; dual-row auto-scrolling
-   review cards.
+6. **Testimonials** (`#reviews`) — heading "Reviews."; a single glassmorphism
+   carousel scrolling one direction, faded out at both edges. Pauses on hover.
 7. **About** (`#about`) — bio beside the about-me graphic, floating stat chips.
 8. **Contact** (`#contact`) — social link cards (X, Instagram, Behance) + email.
 9. **Footer** — giant wordmark, social icons.

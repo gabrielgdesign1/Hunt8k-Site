@@ -10,12 +10,23 @@ function Card({ t }: { t: Testimonial }) {
     .map((w) => w[0])
     .slice(0, 2)
     .join("");
+
   return (
-    <figure className="flex w-[85vw] shrink-0 flex-col justify-between rounded-2xl border border-white/10 bg-[var(--color-ink-2)] p-7 transition-colors duration-300 hover:border-[var(--color-red)]/40 sm:w-[420px]">
-      <div>
+    <figure className="group relative flex w-[85vw] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.055] p-7 shadow-[0_10px_36px_-10px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors duration-300 hover:border-[var(--color-red)]/45 sm:w-[400px]">
+      {/* glass highlights — a lit top edge and a soft diagonal sheen */}
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
+      <span className="pointer-events-none absolute -left-1/3 -top-1/2 h-[180%] w-[60%] rotate-12 bg-gradient-to-b from-white/[0.09] to-transparent blur-2xl" />
+
+      <div className="relative">
         <div className="mb-4 flex gap-0.5 text-[var(--color-red)]">
           {Array.from({ length: 5 }).map((_, i) => (
-            <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <svg
+              key={i}
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
               <path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 7.1-1z" />
             </svg>
           ))}
@@ -24,52 +35,26 @@ function Card({ t }: { t: Testimonial }) {
           &ldquo;{t.quote}&rdquo;
         </blockquote>
       </div>
-      <figcaption className="mt-6 flex items-center gap-3 border-t border-white/8 pt-5">
+
+      <figcaption className="relative mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
         <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-red-bright)] to-[var(--color-red-deep)] font-display text-sm text-white">
           {initials}
         </span>
-        <div>
-          <div className="font-semibold leading-tight">{t.name}</div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash-dim)]">
-            {t.handle} · {t.subs}
-          </div>
-        </div>
+        <div className="font-semibold leading-tight">{t.name}</div>
       </figcaption>
     </figure>
   );
 }
 
-function Row({
-  items,
-  reverse,
-  duration,
-}: {
-  items: Testimonial[];
-  reverse?: boolean;
-  duration: string;
-}) {
-  const doubled = [...items, ...items];
-  return (
-    <div className="marquee-paused flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
-      <div
-        className="animate-marquee flex shrink-0 gap-5 pr-5"
-        style={{
-          ["--duration" as string]: duration,
-          animationDirection: reverse ? "reverse" : "normal",
-        }}
-      >
-        {doubled.map((t, i) => (
-          <Card key={i} t={t} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function Testimonials() {
-  const half = Math.ceil(TESTIMONIALS.length / 2);
+  // Duplicated once so the -50% marquee keyframe loops seamlessly.
+  const loop = [...TESTIMONIALS, ...TESTIMONIALS];
+
   return (
-    <section id="reviews" className="relative z-10 overflow-hidden py-24 md:py-32">
+    <section
+      id="reviews"
+      className="relative z-10 overflow-hidden py-24 md:py-32"
+    >
       <div className="mx-auto mb-14 max-w-[1400px] px-5 md:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
@@ -91,9 +76,22 @@ export default function Testimonials() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-5">
-        <Row items={TESTIMONIALS.slice(0, half)} duration="46s" />
-        <Row items={TESTIMONIALS.slice(half)} reverse duration="52s" />
+      {/* One track, one direction. The edges are faded with gradient scrims
+          rather than a CSS mask: a mask on an ancestor forms a backdrop root,
+          which would stop the cards' backdrop-blur from picking up the
+          particle field behind them — and there goes the glass. */}
+      <div className="marquee-paused relative flex overflow-hidden">
+        <div
+          className="animate-marquee flex shrink-0 gap-5 pr-5"
+          style={{ ["--duration" as string]: "62s" }}
+        >
+          {loop.map((t, i) => (
+            <Card key={i} t={t} />
+          ))}
+        </div>
+
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[18%] min-w-24 bg-gradient-to-r from-[var(--color-ink)] via-[var(--color-ink)]/55 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[18%] min-w-24 bg-gradient-to-l from-[var(--color-ink)] via-[var(--color-ink)]/55 to-transparent" />
       </div>
     </section>
   );

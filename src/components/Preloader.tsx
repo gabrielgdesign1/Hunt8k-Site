@@ -71,7 +71,7 @@ export default function Preloader() {
             width={120}
             height={72}
             priority
-            className="mb-6 h-16 w-auto drop-shadow-[0_0_40px_rgba(255,33,22,0.55)]"
+            className="mb-6 h-16 w-auto drop-shadow-[0_0_40px_rgba(228,0,1,0.55)]"
           />
           <div className="h-px w-56 overflow-hidden bg-white/10">
             <div

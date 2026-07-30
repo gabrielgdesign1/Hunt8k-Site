@@ -9,7 +9,7 @@ export default function Contact() {
   return (
     <section id="contact" className="relative z-10 py-24 md:py-32">
       {/* glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,33,22,0.22),transparent_65%)] blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(228,0,1,0.22),transparent_65%)] blur-3xl" />
 
       <div className="mx-auto max-w-[1400px] px-5 md:px-8">
         <div className="grid gap-14 md:grid-cols-2 md:gap-16">

@@ -99,7 +99,7 @@ export default function Hero() {
             style={{
               "--intro-delay": "520ms",
               backgroundImage:
-                "linear-gradient(180deg, #ff5a4d 0%, #ff2116 45%, #c40600 100%)",
+                "linear-gradient(180deg, #ff2424 0%, #e40001 45%, #420101 100%)",
             } as React.CSSProperties}
           >
             {/* top sheen */}

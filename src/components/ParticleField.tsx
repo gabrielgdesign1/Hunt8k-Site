@@ -70,7 +70,7 @@ export default function ParticleField() {
         const x = p.x + Math.sin(t * p.swaySpeed + p.phase) * p.sway;
 
         const g = ctx.createRadialGradient(x, wrapped, 0, x, wrapped, p.r * 4);
-        const core = p.red ? "255,90,77" : "244,242,240";
+        const core = p.red ? "255,36,36" : "244,242,240";
         g.addColorStop(0, `rgba(${core},${p.alpha})`);
         g.addColorStop(0.4, `rgba(${core},${p.alpha * 0.35})`);
         g.addColorStop(1, `rgba(${core},0)`);

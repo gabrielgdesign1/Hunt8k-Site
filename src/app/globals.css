@@ -11,16 +11,18 @@
   --color-ash: #a7a4a8;
   --color-ash-dim: #6b686d;
 
-  --color-red: #ff2116;
-  --color-red-bright: #ff453a;
-  --color-red-deep: #b00500;
-  --color-red-blood: #7a0400;
+  /* Brand reds. `red` and `red-deep` are the two brand values; `red-bright`
+     is a lighter tint of `red`, needed because small mono labels sit on the
+     ink background and #e40001 alone only reaches ~4.1:1 contrast there. */
+  --color-red: #e40001;
+  --color-red-bright: #ff2424;
+  --color-red-deep: #420101;
 
   --font-display: var(--font-tilt-warp), "Arial Narrow", sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
 
-  --shadow-glow: 0 0 60px -12px rgba(255, 33, 22, 0.55);
+  --shadow-glow: 0 0 60px -12px rgba(228, 0, 1, 0.55);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -95,8 +97,16 @@ html.lenis body {
 /* ------------------------------------------------------------------ */
 /*  UTILITIES                                                          */
 /* ------------------------------------------------------------------ */
+/* The dark brand red is nearly black, so it only gets the last sliver —
+   ending the ramp on it outright would fade headings into the background. */
 .text-gradient-red {
-  background: linear-gradient(180deg, #fff 0%, var(--color-red-bright) 55%, var(--color-red-deep) 100%);
+  background: linear-gradient(
+    180deg,
+    #fff 0%,
+    var(--color-red-bright) 44%,
+    var(--color-red) 76%,
+    var(--color-red-deep) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

@@ -33,7 +33,7 @@ export default function CreatorGrid() {
       className="relative z-10 overflow-hidden py-24 md:py-32"
     >
       {/* ambient glow */}
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(255,33,22,0.12),transparent_65%)] blur-2xl" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(228,0,1,0.12),transparent_65%)] blur-2xl" />
 
       <div className="relative mx-auto max-w-[1400px] px-5 md:px-8">
         <div className="mb-14 grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-end">

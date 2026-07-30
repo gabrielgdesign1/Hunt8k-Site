@@ -85,51 +85,41 @@ export const CREATORS: Creator[] = [
 export type Testimonial = {
   quote: string;
   name: string;
-  handle: string;
-  subs: string;
 };
 
 export const TESTIMONIALS: Testimonial[] = [
   {
+    name: "BadmiGame",
     quote:
-      "8K just gets it. I send the raw clip and a rough idea, and the thumbnail comes back better than what was in my head. My CTR jumped and I stopped second-guessing uploads.",
-    name: "KreekCraft",
-    handle: "@KreekCraft",
-    subs: "9.8M subscribers",
+      "Hunt continues to produce high-quality work for flexible prices and ensures that their clients are satisfied. I’m glad to commission them.",
   },
   {
+    name: "Biphilus30",
     quote:
-      "First version is always the one. No endless revisions, no chasing — it lands exactly right and it slaps. Fastest turnaround I've had from any designer.",
-    name: "Sketch",
-    handle: "@Sketch",
-    subs: "4.2M subscribers",
+      "Great. Professional thumbnail work that looked amazing, just how I envisioned it, was done on time, with great communication, and all for a fair price.",
   },
   {
+    name: "Killa1x",
     quote:
-      "Every thumbnail feels engineered to get clicked. The contrast, the faces, the color — you can tell there's actual strategy behind it, not just filters.",
-    name: "FaZe Replays",
-    handle: "@Replays",
-    subs: "1.1M subscribers",
+      "5 Stars - Quick Response Times / Perfect Visions / On Time Deliveries / Friendly & Helpful.",
   },
   {
+    name: "Replays",
     quote:
-      "Reliable, creative, and always on time. 8K understands the gaming space better than anyone I've worked with. Genuinely leveled up my channel's look.",
-    name: "ChoiFN",
-    handle: "@ChoiFN",
-    subs: "780K subscribers",
+      "Hunt is amazing at creating thumbnails! He has made a bunch for my channel ‘Replays’! Super reliable!",
   },
   {
-    quote:
-      "The IRL thumbnails hit different. He knows how to make a face pop off the feed and make people curious enough to click. Highly recommend.",
-    name: "Gavin Magnus",
-    handle: "@GavinMagnus",
-    subs: "12M subscribers",
-  },
-  {
-    quote:
-      "Been through a bunch of thumbnail guys. 8K is the first one where I don't have to explain twice. It just works, every single time.",
     name: "Joey773",
-    handle: "@Joey773",
-    subs: "540K subscribers",
+    quote:
+      "Amazing, very skilled young individual who has great potential in this industry and is great at his job and always creates the best thumbnails!",
+  },
+  {
+    name: "ChoiFN1",
+    quote:
+      "Hunt has always delivered high level thumbnails for my channel, turnaround time is great as well. I highly recommend!",
+  },
+  {
+    name: "James Chugs",
+    quote: "Excellent. Thumbnails are amazing. Sent on time and affordable!",
   },
 ];
