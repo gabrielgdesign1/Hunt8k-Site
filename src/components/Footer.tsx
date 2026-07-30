@@ -1,19 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Lenis from "lenis";
 import { SITE } from "@/lib/site";
 import SocialIcon from "@/components/ui/SocialIcon";
 
-function toTop() {
-  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
-  if (lenis) lenis.scrollTo(0, { duration: 1.6 });
-  else window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
 export default function Footer() {
   return (
-    <footer className="relative z-10 overflow-hidden bg-[var(--color-ink)]">
+    <footer className="relative z-10 overflow-hidden">
       {/* giant wordmark */}
       <div className="relative flex justify-center pt-16">
         <h2 className="font-display text-[22vw] leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.08)] select-none">
@@ -50,16 +43,6 @@ export default function Footer() {
               </a>
             ))}
           </div>
-
-          <button
-            onClick={toTop}
-            className="flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-[var(--color-ash)] transition-colors hover:border-[var(--color-red)] hover:text-[var(--color-bone)]"
-          >
-            Back to top
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-          </button>
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 text-center font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash-dim)] md:flex-row">

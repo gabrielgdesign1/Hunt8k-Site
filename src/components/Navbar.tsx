@@ -5,12 +5,15 @@ import Image from "next/image";
 import Lenis from "lenis";
 import { SITE } from "@/lib/site";
 
+// Order mirrors the order the sections appear on the page.
 const LINKS = [
+  { label: "Home", href: "#top" },
+  { label: "Stats", href: "#stats" },
+  { label: "Clients", href: "#creators" },
   { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Process", href: "#process" },
   { label: "Reviews", href: "#reviews" },
-  { label: "FAQ", href: "#faq" },
+  { label: "About Me", href: "#about" },
+  { label: "Let’s Work", href: "#contact" },
 ];
 
 function scrollTo(href: string) {
@@ -36,6 +39,7 @@ export default function Navbar() {
           <button
             onClick={() => go("#top")}
             className="group flex items-center"
+            data-intro="drop"
           >
             <Image
               src="/branding/logo.png"
@@ -47,12 +51,16 @@ export default function Navbar() {
             />
           </button>
 
-          <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-black/45 px-2 py-2 backdrop-blur-xl md:flex">
+          <div
+            className="hidden items-center gap-0.5 rounded-full border border-white/10 bg-black/45 px-2 py-2 backdrop-blur-xl md:flex lg:gap-1"
+            data-intro="drop"
+            style={{ "--intro-delay": "110ms" } as React.CSSProperties}
+          >
             {LINKS.map((l) => (
               <button
                 key={l.href}
                 onClick={() => go(l.href)}
-                className="rounded-full px-4 py-1.5 text-sm text-[var(--color-ash)] transition-colors hover:bg-white/[0.06] hover:text-[var(--color-bone)]"
+                className="whitespace-nowrap rounded-full px-2.5 py-1.5 text-[13px] text-[var(--color-ash)] transition-colors hover:bg-white/[0.06] hover:text-[var(--color-bone)] lg:px-4 lg:text-sm"
               >
                 {l.label}
               </button>
@@ -92,18 +100,12 @@ export default function Navbar() {
           <button
             key={l.href}
             onClick={() => go(l.href)}
-            className="font-display text-5xl uppercase text-left leading-none text-[var(--color-bone)] transition-colors hover:text-[var(--color-red)]"
+            className="font-display text-4xl uppercase text-left leading-none text-[var(--color-bone)] transition-colors hover:text-[var(--color-red)]"
             style={{ transitionDelay: `${i * 30}ms` }}
           >
             {l.label}
           </button>
         ))}
-        <button
-          onClick={() => go("#contact")}
-          className="mt-6 w-fit rounded-full bg-[var(--color-red)] px-6 py-3 font-semibold text-white"
-        >
-          Hire Me →
-        </button>
         <a
           href={`mailto:${SITE.email}`}
           className="mt-8 font-mono text-xs uppercase tracking-widest text-[var(--color-ash)]"

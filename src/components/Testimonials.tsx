@@ -78,9 +78,7 @@ export default function Testimonials() {
             </Reveal>
             <Reveal i={1}>
               <h2 className="mt-5 font-display display-xl text-balance">
-                What creators
-                <br />
-                <span className="text-gradient-red">say.</span>
+                <span className="text-gradient-red">Reviews.</span>
               </h2>
             </Reveal>
           </div>

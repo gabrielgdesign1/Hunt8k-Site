@@ -3,9 +3,7 @@ import Work from "@/components/work/Work";
 import About from "@/components/About";
 import Stats from "@/components/Stats";
 import CreatorGrid from "@/components/CreatorGrid";
-import Process from "@/components/Process";
 import Testimonials from "@/components/Testimonials";
-import Faq from "@/components/Faq";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -13,14 +11,14 @@ export default function Home() {
   return (
     <main className="relative">
       <Hero />
-      <div className="relative z-10 bg-[var(--color-ink)]">
+      {/* No background of its own — the body carries the ink colour so the
+          particle field behind (z-0) stays visible through the sections. */}
+      <div className="relative z-10">
         <Stats />
         <CreatorGrid />
         <Work />
-        <About />
-        <Process />
         <Testimonials />
-        <Faq />
+        <About />
         <Contact />
         <Footer />
       </div>

@@ -65,7 +65,8 @@ gets into a broken HMR state after many rapid edits (fix: stop it,
 Rendered in this order (see `src/app/page.tsx`):
 
 1. **Navbar** — fixed pill nav; logo-only mark (no wordmark); anchor links.
-   Completely static (does not move/resize on scroll).
+   Completely static (does not move/resize on scroll). Links, in page order:
+   Home · Stats · Clients · Work · Reviews · About Me · Let's Work.
 2. **Hero** (`#top`) — full-viewport 3D scattered collage of the designer's
    thumbnails behind the headline **"Turn Views Into Clicks."** + a glossy
    red **Contact** button. Mouse-parallax only; scrolling scrolls the page.
@@ -77,12 +78,21 @@ Rendered in this order (see `src/app/page.tsx`):
    hover zoom + red ring, "50M+ combined subscribers" metric.
 5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL) with a full
    lightbox (prev/next).
-6. **About** (`#about`) — bio beside the about-me graphic, floating stat chips.
-7. **Process** (`#process`) — 3-step process with a scroll-drawn progress rail.
-8. **Testimonials** (`#reviews`) — dual-row auto-scrolling review cards.
-9. **FAQ** (`#faq`) — accordion.
-10. **Contact** (`#contact`) — social link cards (X, Instagram, Behance) + email.
-11. **Footer** — giant wordmark, social icons, back-to-top.
+6. **Testimonials** (`#reviews`) — heading "Reviews."; dual-row auto-scrolling
+   review cards.
+7. **About** (`#about`) — bio beside the about-me graphic, floating stat chips.
+8. **Contact** (`#contact`) — social link cards (X, Instagram, Behance) + email.
+9. **Footer** — giant wordmark, social icons.
+
+Behind everything sits **ParticleField** (`src/components/ParticleField.tsx`) —
+a fixed, full-viewport canvas of slowly drifting light particles at `z-0`. For
+it to show through, the page wrapper and sections must stay background-free;
+the ink colour comes from `body`. Adding `bg-[var(--color-ink)]` back to a
+section will hide the particles behind it.
+
+> The **Process**, **FAQ** and **back-to-top** elements were removed. Their
+> data (`PROCESS`, `FAQ`) is out of `site.ts` too — recover from git history
+> if they're ever wanted back.
 
 ---
 
@@ -96,9 +106,7 @@ Rendered in this order (see `src/app/page.tsx`):
 | `WORK` | Portfolio gallery items (gaming + IRL) |
 | `STATS` | The bar-graph numbers, labels, and the "Top Rated" badge |
 | `CREATORS` | The 13 clients in the bento grid (name, handle, subs, URL) |
-| `PROCESS` | The 3 process steps |
 | `TESTIMONIALS` | Client review quotes |
-| `FAQ` | Questions and answers |
 
 > ⚠️ **`SITE.email` is a placeholder** (`hunt8k.designs@gmail.com`). Update it
 > to the real booking email. Social links are already set to the real
@@ -164,6 +172,28 @@ positions/sizes by editing those arrays.
 - Implementation: `src/lib/motion.ts` + the `motion-on` class toggled on
   `<html>` by `SmoothScroll.tsx` (this lets CSS animations like the marquees
   run even under reduced-motion when the user opts in).
+
+### Intro animation & scroll restoration
+
+Two behaviours that work together, both keyed off `src/lib/scroll.ts` (which
+keeps the last scroll offset in `sessionStorage` under `hunt8k-scroll`):
+
+- **Fresh visit** (saved offset is 0): the preloader counts up, then hands off
+  to the intro — `Preloader.tsx` swaps `intro-armed` → `intro-play` on
+  `<html>`, and every `[data-intro]` element animates in. Stagger is set
+  per-element with a `--intro-delay` inline custom property; the animation
+  variants (`rise` / `drop` / `fade`) live in `globals.css`.
+- **Reload mid-page**: the offset is restored so you stay where you were, and
+  the intro is skipped entirely — the preloader shows only a brief ink cover
+  while the jump happens underneath, so you never see it move.
+
+`SmoothScroll.tsx` sets `history.scrollRestoration = "manual"` and re-applies
+the offset a few times as late-loading assets change the document height (the
+browser's own restoration fires too early and lands short). Position is saved
+on scroll (coalesced to one write per frame) and on `pagehide`.
+
+> `intro-armed` sets `[data-intro] { opacity: 0 }` and is only ever added by
+> JS, so with JS off — or under reduced motion — content is simply visible.
 
 ---
 

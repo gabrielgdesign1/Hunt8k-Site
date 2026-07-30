@@ -29,11 +29,11 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="top" className="relative h-screen overflow-hidden">
+    <section id="top" className="relative z-10 h-screen overflow-hidden">
       <div className="flex h-full items-center justify-center">
         {/* 3D tunnel — static depth arrangement, reacts to mouse only */}
         {mounted && !reduce && (
-          <div className="absolute inset-0">
+          <div className="absolute inset-0" data-intro="fade">
             <ThumbnailTunnel />
           </div>
         )}
@@ -76,17 +76,31 @@ export default function Hero() {
           )}
 
           <h1 className="font-display display-hero text-balance">
-            <span className="block text-[var(--color-bone)]">Turn Views Into</span>
-            <span className="block text-[var(--color-red)]">Clicks.</span>
+            <span
+              className="block text-[var(--color-bone)]"
+              data-intro="rise"
+              style={{ "--intro-delay": "260ms" } as React.CSSProperties}
+            >
+              Turn Views Into
+            </span>
+            <span
+              className="block text-[var(--color-red)]"
+              data-intro="rise"
+              style={{ "--intro-delay": "380ms" } as React.CSSProperties}
+            >
+              Clicks.
+            </span>
           </h1>
 
           <button
             onClick={scrollToContact}
+            data-intro="rise"
             className="group relative mt-9 overflow-hidden rounded-full px-9 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
             style={{
+              "--intro-delay": "520ms",
               backgroundImage:
                 "linear-gradient(180deg, #ff5a4d 0%, #ff2116 45%, #c40600 100%)",
-            }}
+            } as React.CSSProperties}
           >
             {/* top sheen */}
             <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent" />

@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
+import ParticleField from "@/components/ParticleField";
 
 const tiltWarp = Tilt_Warp({
   weight: "400",
@@ -57,6 +58,7 @@ export default function RootLayout({
     >
       <body className="grain antialiased">
         <Preloader />
+        <ParticleField />
         <SmoothScroll>
           <Navbar />
           {children}

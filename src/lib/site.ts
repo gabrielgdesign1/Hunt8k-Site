@@ -81,24 +81,6 @@ export const CREATORS: Creator[] = [
   { slug: "joey773", name: "Joey773", handle: "@Joey773", subs: "100K+", url: "https://www.youtube.com/@Joey773" },
 ];
 
-export const PROCESS = [
-  {
-    no: "01",
-    title: "Research & Concept",
-    body: "I break down the video, the audience and the competition — then hunt the single idea that makes a viewer stop mid-scroll.",
-  },
-  {
-    no: "02",
-    title: "Design & Psychology",
-    body: "Thumbnails aren't just design, they're psychology. Emotion, contrast and focal hierarchy engineered to spike your CTR.",
-  },
-  {
-    no: "03",
-    title: "Refine & Deliver",
-    body: "Pixel-level polish, platform-optimised exports and fast revisions. Delivered ready to upload — usually within 24 hours.",
-  },
-];
-
 export type Testimonial = {
   quote: string;
   name: string;
@@ -148,28 +130,5 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Joey773",
     handle: "@Joey773",
     subs: "540K subscribers",
-  },
-];
-
-export const FAQ = [
-  {
-    q: "What types of thumbnails do you design?",
-    a: "Primarily gaming and IRL YouTube thumbnails — Fortnite, COD, Roblox, reactions, vlogs and live streams. If it needs to stop the scroll and earn the click, I design it.",
-  },
-  {
-    q: "How fast is the turnaround?",
-    a: "Most single thumbnails are delivered within 24 hours. Rush delivery is available, and retainer clients get priority in the queue.",
-  },
-  {
-    q: "What do you need from me to start?",
-    a: "The video title/idea, any raw footage or face shots, and a rough vibe if you have one. That's it — I handle concept, composition and the rest.",
-  },
-  {
-    q: "How many revisions do I get?",
-    a: "Unlimited reasonable revisions until it's right. In practice the first version usually lands, but I'll refine until you're happy to hit upload.",
-  },
-  {
-    q: "What's your pricing?",
-    a: "Per-thumbnail rates and monthly retainer packages are available. Message me with your channel and volume and I'll send a tailored quote.",
   },
 ];
