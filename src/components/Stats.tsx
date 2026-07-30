@@ -87,8 +87,11 @@ export default function Stats() {
       id="stats"
       className="relative z-10 overflow-hidden py-24 md:py-32"
     >
-      {/* radial red glow backdrop */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_78%,rgba(228,0,1,0.22),transparent_65%)]" />
+      {/* Radial red glow backdrop. The centre/radius/stop are tuned so the
+          gradient reaches full transparency at ~90% of the section height —
+          it used to still be mid-ramp at the bottom edge, which clipped into
+          a hard horizontal line where this section met the next. */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_34%_at_50%_66%,rgba(228,0,1,0.22),transparent_70%)]" />
 
       <div className="relative mx-auto max-w-[1400px] px-5 md:px-8">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

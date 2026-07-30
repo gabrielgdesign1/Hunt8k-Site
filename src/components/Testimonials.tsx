@@ -11,11 +11,14 @@ function Card({ t }: { t: Testimonial }) {
     .slice(0, 2)
     .join("");
 
+  // The fill is deliberately almost nothing — on an ink background even 5%
+  // white reads as a solid grey panel rather than glass. The card is defined
+  // by its lit edges and the blur of whatever passes behind it.
   return (
-    <figure className="group relative flex w-[85vw] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.055] p-7 shadow-[0_10px_36px_-10px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors duration-300 hover:border-[var(--color-red)]/45 sm:w-[400px]">
+    <figure className="group relative flex w-[85vw] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-white/[0.14] bg-white/[0.012] p-7 backdrop-blur-2xl transition-colors duration-300 hover:border-[var(--color-red)]/45 sm:w-[400px]">
       {/* glass highlights — a lit top edge and a soft diagonal sheen */}
-      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
-      <span className="pointer-events-none absolute -left-1/3 -top-1/2 h-[180%] w-[60%] rotate-12 bg-gradient-to-b from-white/[0.09] to-transparent blur-2xl" />
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+      <span className="pointer-events-none absolute -left-1/3 -top-1/2 h-[180%] w-[60%] rotate-12 bg-gradient-to-b from-white/[0.05] to-transparent blur-2xl" />
 
       <div className="relative">
         <div className="mb-4 flex gap-0.5 text-[var(--color-red)]">

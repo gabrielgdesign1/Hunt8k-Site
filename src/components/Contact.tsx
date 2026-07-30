@@ -27,8 +27,8 @@ export default function Contact() {
             </Reveal>
             <Reveal i={2}>
               <p className="mt-6 max-w-md text-[var(--color-ash)] leading-relaxed">
-                Got a video that deserves a better thumbnail? Reach out on
-                socials or drop an email — I usually reply within a few hours.
+                Ready to start a project? Reach out on one of my socials or
+                send an email so we can get started!
               </p>
             </Reveal>
 

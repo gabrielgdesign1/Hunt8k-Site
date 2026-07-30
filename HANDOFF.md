@@ -89,8 +89,13 @@ Rendered in this order (see `src/app/page.tsx`):
 4. **CreatorGrid** (`#creators`) — "Trusted by creators" **bento grid** of 13
    creators (feature tiles for the biggest channels), avatar-forward with
    hover zoom + red ring, "50M+ combined subscribers" metric.
-5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL) with a full
-   lightbox (prev/next).
+5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL), thumbnails
+   only with no captions, opening a lightbox (prev/next/Escape). The lightbox
+   is rendered through a **portal into `<body>`** — it has to be, because this
+   section is `relative z-10` inside another `relative z-10` wrapper, so
+   anything inside it is capped at z-10 against the fixed navbar (z-50) no
+   matter how high its own z-index goes. That's what previously ate clicks on
+   the close button. Keep any new full-screen overlay portalled too.
 6. **Testimonials** (`#reviews`) — heading "Reviews."; a single glassmorphism
    carousel scrolling one direction, faded out at both edges. Pauses on hover.
 7. **About** (`#about`) — bio beside the about-me graphic, floating stat chips.
