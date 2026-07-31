@@ -84,7 +84,7 @@ export default function Testimonials() {
           rather than a CSS mask: a mask on an ancestor forms a backdrop root,
           which would stop the cards' backdrop-blur from picking up the
           particle field behind them — and there goes the glass. */}
-      <div className="marquee-paused relative flex overflow-hidden">
+      <div className="relative flex overflow-hidden">
         <div
           className="animate-marquee flex shrink-0 gap-5 pr-5"
           style={{ ["--duration" as string]: "62s" }}

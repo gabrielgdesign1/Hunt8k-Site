@@ -96,23 +96,12 @@ export default function CreatorGrid() {
               </p>
             </Reveal>
             <Reveal i={3}>
-              <div className="mt-8 flex items-center gap-6 border-t border-white/10 pt-6">
-                <div>
-                  <div className="font-display text-4xl leading-none text-[var(--color-bone)] md:text-5xl">
-                    50M+
-                  </div>
-                  <div className="mt-2 font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
-                    combined subscribers
-                  </div>
+              <div className="mt-8 border-t border-white/10 pt-6">
+                <div className="font-display text-4xl leading-none text-[var(--color-bone)] md:text-5xl">
+                  50M+
                 </div>
-                <div className="h-10 w-px bg-white/12" />
-                <div>
-                  <div className="font-display text-4xl leading-none text-[var(--color-bone)] md:text-5xl">
-                    {CREATORS.length}
-                  </div>
-                  <div className="mt-2 font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
-                    creators
-                  </div>
+                <div className="mt-2 font-mono text-[10px] uppercase tracking-widest text-[var(--color-ash)]">
+                  combined subscribers
                 </div>
               </div>
             </Reveal>

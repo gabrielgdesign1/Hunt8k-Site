@@ -284,9 +284,6 @@ html.intro-play [data-intro="fade"] {
 .animate-marquee {
   animation: marquee-x var(--duration, 40s) linear infinite;
 }
-.marquee-paused:hover .animate-marquee {
-  animation-play-state: paused;
-}
 
 @keyframes spin-slow {
   to {
