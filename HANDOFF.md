@@ -86,9 +86,23 @@ Rendered in this order (see `src/app/page.tsx`):
 3. **Stats** (`#stats`) — "By the Numbers" animated **equalizer bar graph**
    (500+ Projects, 80M+ Views, 50+ Satisfied Clients w/ *Top Rated* badge,
    3+ Years). Bars grow + numbers count up on scroll.
-4. **CreatorGrid** (`#creators`) — "Trusted by creators" **bento grid** of 13
-   creators (feature tiles for the biggest channels), avatar-forward with
-   hover zoom + red ring, "50M+ combined subscribers" metric.
+4. **CreatorGrid** (`#creators`) — "Trusted by creators". A **roster index**:
+   the 13 creators as numbered rows of huge outlined display type that fill
+   in solid on hover, the rest of the list dimming back so only the row under
+   the cursor is lit. A portrait card trails the cursor (spring-lagged,
+   tilting with pointer velocity) showing that creator's avatar, name and
+   subscriber count. Keeps the "50M+ combined subscribers" metric.
+   - The card is **portalled to `<body>`** for the same stacking reason as the
+     Work lightbox, and only renders when `(hover: hover) and (pointer: fine)`
+     and reduced-motion is off. On touch, each row's small marker portrait is
+     the avatar.
+   - The active row comes from one `pointermove` handler on the list reading
+     `closest("[data-row]")`, not per-row enter events, so fast pointer
+     movement can't skip a row. Dismissal is a **native** `pointerleave`
+     listener on the list.
+   - The outline→fill effect lives in `globals.css` (`.roster-name`), wrapped
+     in `@supports (-webkit-text-stroke:…)` so unsupported browsers get solid
+     names rather than 13 invisible rows.
 5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL), thumbnails
    only with no captions, opening a lightbox (prev/next/Escape). The lightbox
    is rendered through a **portal into `<body>`** — it has to be, because this
@@ -157,8 +171,9 @@ node scripts/fetch-creators.mjs  # re-pull creator avatars → public/creators
 ```
 
 To add a creator, add an entry to `CREATORS` in `site.ts`, add the URL to
-`scripts/fetch-creators.mjs`, run that script, then (optionally) give them a
-feature-tile size in `src/components/CreatorGrid.tsx` (`SIZE` map).
+`scripts/fetch-creators.mjs`, and run that script. The roster renders straight
+from `CREATORS` in order, so there's nothing to configure per creator — the
+row number and the "N Creators" count both derive from the array.
 
 ---
 

@@ -218,6 +218,44 @@ html.intro-play [data-intro="fade"] {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/*  CLIENT ROSTER (#creators)                                          */
+/* ------------------------------------------------------------------ */
+/* Names read as outlined type and fill in solid on hover. The solid
+   colour is the base state so that a browser without -webkit-text-stroke
+   shows readable names rather than thirteen invisible rows. */
+.roster-name {
+  color: var(--color-bone);
+  transition: color 0.5s var(--ease-out-expo),
+    -webkit-text-stroke-color 0.5s var(--ease-out-expo);
+}
+
+@supports (-webkit-text-stroke: 1px currentColor) {
+  .roster-name {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(244, 242, 240, 0.5);
+  }
+  .roster-row:hover .roster-name,
+  .roster-row:focus-visible .roster-name {
+    color: var(--color-bone);
+    -webkit-text-stroke-color: transparent;
+  }
+}
+
+/* Hovering the list pushes every other row back, so the one under the
+   cursor is the only thing in focus. */
+.roster-row {
+  transition: opacity 0.4s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .roster:hover .roster-row {
+    opacity: 0.28;
+  }
+  .roster:hover .roster-row:hover {
+    opacity: 1;
+  }
+}
+
 /* marquee */
 @keyframes marquee-x {
   from {
