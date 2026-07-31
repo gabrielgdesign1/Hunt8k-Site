@@ -91,41 +91,50 @@ export const CREATORS: Creator[] = [
 export type Testimonial = {
   quote: string;
   name: string;
+  /** filename (no extension) in /public/reviews — the reviewer's channel avatar */
+  avatar: string;
 };
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "BadmiGame",
+    avatar: "badmigame",
     quote:
       "Hunt continues to produce high-quality work for flexible prices and ensures that their clients are satisfied. I’m glad to commission them.",
   },
   {
     name: "Biphilus30",
+    avatar: "biphilus30",
     quote:
       "Great. Professional thumbnail work that looked amazing, just how I envisioned it, was done on time, with great communication, and all for a fair price.",
   },
   {
     name: "Killa1x",
+    avatar: "killa1x",
     quote:
       "5 Stars - Quick Response Times / Perfect Visions / On Time Deliveries / Friendly & Helpful.",
   },
   {
     name: "Replays",
+    avatar: "replays",
     quote:
       "Hunt is amazing at creating thumbnails! He has made a bunch for my channel ‘Replays’! Super reliable!",
   },
   {
     name: "Joey773",
+    avatar: "joey773",
     quote:
       "Amazing, very skilled young individual who has great potential in this industry and is great at his job and always creates the best thumbnails!",
   },
   {
     name: "ChoiFN1",
+    avatar: "choifn1",
     quote:
       "Hunt has always delivered high level thumbnails for my channel, turnaround time is great as well. I highly recommend!",
   },
   {
     name: "James Chugs",
+    avatar: "james-chugs",
     quote: "Excellent. Thumbnails are amazing. Sent on time and affordable!",
   },
 ];

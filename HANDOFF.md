@@ -107,10 +107,14 @@ Rendered in this order (see `src/app/page.tsx`):
    Desktop**), thumbnails only with no captions, opening a lightbox
    (prev/next/Escape).
    - Each filter opens on a **3×3** and reveals the rest behind a **View
-     more** button; a **View full portfolio** button (his Behance, read from
-     `SITE.socials`) sits below it and is always shown. The reveal is
-     data-driven — `INITIAL = 9`, and View more only appears when a filter
-     holds more than nine, so adding images needs no code change.
+     more** button (no count in the label — just "View more"). A **View full
+     portfolio** button (his Behance, read from `SITE.socials`) only appears
+     once the grid is fully expanded — i.e. after View more is clicked (or
+     immediately hidden again on switching filters, since `expanded` resets).
+     If a filter never needs a View more (currently IRL & Desktop, with only
+     8 images), the portfolio button never shows there either — it's tied to
+     the expand action, not to "has more work to see." The reveal itself is
+     data-driven off `INITIAL = 9`, so adding images needs no code change.
    - **All Work** interleaves the two categories so the opening 3×3 is a mix
      rather than the first nine gaming pieces.
    - Current counts: gaming **14** (9 + 5), irl **8**. IRL & Desktop is short
@@ -124,6 +128,8 @@ Rendered in this order (see `src/app/page.tsx`):
    the close button. Keep any new full-screen overlay portalled too.
 6. **Testimonials** (`#reviews`) — heading "Reviews."; a single glassmorphism
    carousel scrolling one direction, faded out at both edges. Pauses on hover.
+   Each card shows the reviewer's real YouTube avatar (`TESTIMONIALS[].avatar`
+   → `public/reviews/<avatar>.webp`) instead of initials.
 7. **About** (`#about`) — bio beside the about-me graphic, floating stat chips.
 8. **Contact** (`#contact`) — social link cards (X, Instagram, Behance) + email.
 9. **Footer** — giant wordmark, social icons.
@@ -173,6 +179,8 @@ Optimized web images (WebP) are committed under `public/`:
 - `public/hero/` — hero collage images: `main-1..4.webp` + `bg-1..3.webp`
 - `public/creators/` — the 13 creator avatars (fetched from their YouTube
   channels)
+- `public/reviews/` — the 7 reviewer avatars for the Testimonials cards
+  (also fetched from YouTube, via `scripts/fetch-review-avatars.mjs`)
 
 **Raw source images are git-ignored** (`Gaming thumbnails/`, `IRL thumbnails/`,
 `Hero section thumbnails/`, `src/raw/`). Regeneration scripts in `scripts/`:
@@ -194,10 +202,15 @@ the superseded first batch of thumbnails.
 > renaming a slug will break those paths.
 
 ```bash
-node scripts/optimize.mjs        # work thumbnails → public/work
-node scripts/optimize-hero.mjs   # hero images → public/hero
-node scripts/fetch-creators.mjs  # re-pull creator avatars → public/creators
+node scripts/optimize.mjs              # work thumbnails → public/work
+node scripts/optimize-hero.mjs         # hero images → public/hero
+node scripts/fetch-creators.mjs        # re-pull creator avatars → public/creators
+node scripts/fetch-review-avatars.mjs  # re-pull reviewer avatars → public/reviews
 ```
+
+To add a reviewer, add an entry to `TESTIMONIALS` in `site.ts` (with an
+`avatar` slug) and a matching `{ slug, url }` row in
+`scripts/fetch-review-avatars.mjs`, then run that script.
 
 To add a creator, add an entry to `CREATORS` in `site.ts`, add the URL to
 `scripts/fetch-creators.mjs`, and run that script. The roster renders straight

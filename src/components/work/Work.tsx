@@ -244,9 +244,6 @@ export default function Work() {
                 className="group flex items-center gap-2.5 rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-[var(--color-bone)] transition-colors duration-300 hover:border-[var(--color-red)] hover:bg-[var(--color-red)]/10"
               >
                 View more
-                <span className="font-mono text-xs text-[var(--color-ash)]">
-                  ({remaining})
-                </span>
                 <svg
                   width="15"
                   height="15"
@@ -262,33 +259,44 @@ export default function Work() {
             )}
           </AnimatePresence>
 
-          <a
-            href={BEHANCE}
-            target="_blank"
-            rel="noreferrer"
-            className="group relative overflow-hidden rounded-full px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:-translate-y-0.5"
-            style={{
-              backgroundImage:
-                "linear-gradient(180deg, #ff2424 0%, #e40001 45%, #420101 100%)",
-            }}
-          >
-            <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent" />
-            <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25" />
-            <span className="relative flex items-center gap-2">
-              View full portfolio
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          {/* Only appears once the grid is fully expanded — before that,
+              "View more" is already offering the next step. */}
+          <AnimatePresence>
+            {expanded && (
+              <motion.a
+                key="portfolio"
+                href={BEHANCE}
+                target="_blank"
+                rel="noreferrer"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative overflow-hidden rounded-full px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:-translate-y-0.5"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(180deg, #ff2424 0%, #e40001 45%, #420101 100%)",
+                }}
               >
-                <path d="M7 17L17 7M17 7H8M17 7V16" />
-              </svg>
-            </span>
-          </a>
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent" />
+                <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25" />
+                <span className="relative flex items-center gap-2">
+                  View full portfolio
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  >
+                    <path d="M7 17L17 7M17 7H8M17 7V16" />
+                  </svg>
+                </span>
+              </motion.a>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 

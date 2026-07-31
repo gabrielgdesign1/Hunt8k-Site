@@ -1,16 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { TESTIMONIALS, type Testimonial } from "@/lib/site";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Reveal from "@/components/ui/Reveal";
 
 function Card({ t }: { t: Testimonial }) {
-  const initials = t.name
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("");
-
   // The fill is deliberately almost nothing — on an ink background even 5%
   // white reads as a solid grey panel rather than glass. The card is defined
   // by its lit edges and the blur of whatever passes behind it.
@@ -40,8 +35,14 @@ function Card({ t }: { t: Testimonial }) {
       </div>
 
       <figcaption className="relative mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-red-bright)] to-[var(--color-red-deep)] font-display text-sm text-white">
-          {initials}
+        <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
+          <Image
+            src={`/reviews/${t.avatar}.webp`}
+            alt=""
+            fill
+            sizes="44px"
+            className="object-cover"
+          />
         </span>
         <div className="font-semibold leading-tight">{t.name}</div>
       </figcaption>
