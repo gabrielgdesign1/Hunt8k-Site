@@ -5,7 +5,7 @@ export const SITE = {
   fullName: "Hunt8K",
   role: "Thumbnail Designer",
   tagline: "Scroll-stopping thumbnails for gaming & IRL creators.",
-  email: "hunt8k.designs@gmail.com", // TODO: replace with real booking email
+  email: "hunt8k5@gmail.com",
   socials: [
     { label: "Twitter / X", href: "https://x.com/Hunt8K", icon: "x" as SocialKey },
     { label: "Instagram", href: "https://www.instagram.com/hunt8k.visuals/", icon: "instagram" as SocialKey },
