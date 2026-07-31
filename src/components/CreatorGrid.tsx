@@ -83,7 +83,7 @@ export default function CreatorGrid() {
               <SectionLabel>Clients</SectionLabel>
             </Reveal>
             <Reveal i={1}>
-              <h2 className="mt-5 font-display display-lg text-balance">
+              <h2 className="mt-5 font-display display-xl text-balance">
                 Trusted by{" "}
                 <span className="text-gradient-red italic">creators.</span>
               </h2>
@@ -125,8 +125,8 @@ export default function CreatorGrid() {
               className="dial"
               style={
                 {
-                  "--size": "clamp(292px, 44vw, 520px)",
-                  "--node": "clamp(44px, 6.6vw, 66px)",
+                  "--size": "clamp(320px, 50vw, 580px)",
+                  "--node": "clamp(48px, 7.4vw, 74px)",
                 } as React.CSSProperties
               }
               onPointerMove={track}
