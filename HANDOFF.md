@@ -86,23 +86,28 @@ Rendered in this order (see `src/app/page.tsx`):
 3. **Stats** (`#stats`) — "By the Numbers" animated **equalizer bar graph**
    (500+ Projects, 80M+ Views, 50+ Satisfied Clients w/ *Top Rated* badge,
    3+ Years). Bars grow + numbers count up on scroll.
-4. **CreatorGrid** (`#creators`) — "Trusted by creators". A **roster index**:
-   the 13 creators as numbered rows of huge outlined display type that fill
-   in solid on hover, the rest of the list dimming back so only the row under
-   the cursor is lit. A portrait card trails the cursor (spring-lagged,
-   tilting with pointer velocity) showing that creator's avatar, name and
-   subscriber count. Keeps the "50M+ combined subscribers" metric.
-   - The card is **portalled to `<body>`** for the same stacking reason as the
-     Work lightbox, and only renders when `(hover: hover) and (pointer: fine)`
-     and reduced-motion is off. On touch, each row's small marker portrait is
-     the avatar.
-   - The active row comes from one `pointermove` handler on the list reading
-     `closest("[data-row]")`, not per-row enter events, so fast pointer
-     movement can't skip a row. Dismissal is a **native** `pointerleave`
-     listener on the list.
-   - The outline→fill effect lives in `globals.css` (`.roster-name`), wrapped
-     in `@supports (-webkit-text-stroke:…)` so unsupported browsers get solid
-     names rather than 13 invisible rows.
+4. **CreatorGrid** (`#creators`) — "Trusted by creators". A **dial**: copy and
+   the 50M+/13-creators stats on the left, and on the right a ring of the 13
+   creator avatars around a glass hub. A needle points from the hub at the
+   active creator; the hub shows their name, handle and subscriber count.
+   - The active creator **auto-cycles** every `STEP_MS` (2.4s), and hovering a
+     node overrides it and pauses the cycle. The cycle is what makes every
+     creator's details reachable on touch, where there is no hover.
+   - The avatars **do not orbit** — only the conic-gradient sweep rotates
+     (`.dial-sweep`). A moving target would be miserable to click.
+   - Positions are pure CSS: `.dial-node` swings out to `--angle` then
+     un-rotates so faces stay upright, off `--size`/`--node` set inline. To
+     add a creator, just add to `CREATORS`; the ring re-spaces itself.
+   - Hover comes from one `pointermove` on the dial reading
+     `closest("[data-node]")` rather than per-node enter events, and it
+     deliberately does **not** clear between nodes — otherwise crossing a gap
+     would drop back to the auto-cycle and flicker. Clearing is a **native**
+     `pointerleave` on the dial.
+   - The hub cross-fades (`AnimatePresence` in default sync mode, children
+     absolutely positioned). Don't switch it to `mode="wait"` — the incoming
+     creator would queue behind the outgoing one's exit and lag the pointer.
+   - The cycle stops on `visibilitychange`; a hidden tab still fires timers
+     but freezes rAF, so exits never finish and stale hub entries pile up.
 5. **Work** (`#work`) — filterable gallery (**All Work / Gaming / IRL &
    Desktop**), thumbnails only with no captions, opening a lightbox
    (prev/next/Escape).

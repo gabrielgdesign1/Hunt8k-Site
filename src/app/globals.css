@@ -219,41 +219,57 @@ html.intro-play [data-intro="fade"] {
 }
 
 /* ------------------------------------------------------------------ */
-/*  CLIENT ROSTER (#creators)                                          */
+/*  CLIENT DIAL (#creators)                                            */
 /* ------------------------------------------------------------------ */
-/* Names read as outlined type and fill in solid on hover. The solid
-   colour is the base state so that a browser without -webkit-text-stroke
-   shows readable names rather than thirteen invisible rows. */
-.roster-name {
-  color: var(--color-bone);
-  transition: color 0.5s var(--ease-out-expo),
-    -webkit-text-stroke-color 0.5s var(--ease-out-expo);
+/* A fixed ring of avatars with a needle pointing at the active one. The
+   avatars deliberately do NOT orbit — a moving target is miserable to
+   click. The sense of rotation comes from the sweep and the needle. */
+.dial {
+  /* --size and --node are set inline on the element */
+  position: relative;
+  width: var(--size);
+  height: var(--size);
 }
 
-@supports (-webkit-text-stroke: 1px currentColor) {
-  .roster-name {
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(244, 242, 240, 0.5);
-  }
-  .roster-row:hover .roster-name,
-  .roster-row:focus-visible .roster-name {
-    color: var(--color-bone);
-    -webkit-text-stroke-color: transparent;
-  }
+.dial-node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--node);
+  height: var(--node);
+  margin-left: calc(var(--node) / -2);
+  margin-top: calc(var(--node) / -2);
+  /* swing out to --angle, then un-rotate so the face stays upright */
+  transform: rotate(var(--angle))
+    translateY(calc((var(--size) / -2) + (var(--node) / 2) + 10px))
+    rotate(calc(var(--angle) * -1));
 }
 
-/* Hovering the list pushes every other row back, so the one under the
-   cursor is the only thing in focus. */
-.roster-row {
-  transition: opacity 0.4s var(--ease-out-expo);
+/* radar sweep — the only thing that actually turns */
+.dial-sweep {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(228, 0, 1, 0.22) 26deg,
+    transparent 68deg
+  );
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    transparent 58%,
+    #000 61%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    closest-side,
+    transparent 58%,
+    #000 61%,
+    #000 100%
+  );
+  animation: spin-slow 9s linear infinite;
 }
-@media (hover: hover) and (pointer: fine) {
-  .roster:hover .roster-row {
-    opacity: 0.28;
-  }
-  .roster:hover .roster-row:hover {
-    opacity: 1;
-  }
+
+.dial:hover .dial-sweep {
+  animation-play-state: paused;
 }
 
 /* marquee */
