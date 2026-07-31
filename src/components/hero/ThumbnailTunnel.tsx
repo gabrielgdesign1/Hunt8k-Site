@@ -21,13 +21,17 @@ const HERO_URLS = [
   "/hero/bg-2.webp", // 5
   "/hero/bg-3.webp", // 6
 ];
+// Deliberately none of the seven images above: main-1..4 and bg-1..3 are
+// byte-identical to work pieces (Guapo, Lacy & Ron, Catwoman, Polo Peterbot,
+// Polo FNCS, Replays Flint-Knock, Spider-Man), so picking any of those here
+// would put the same thumbnail on screen twice.
 const WORK_URLS = [
-  "/work/gaming/black-ops-7-tex.webp", // 7
-  "/work/irl/sketch-jynxzi-madden-tex.webp", // 8
-  "/work/gaming/kreekcraft-roblox-tex.webp", // 9
+  "/work/gaming/sypherpk-shattered-event-tex.webp", // 7
+  "/work/irl/rakai-maddy-tex.webp", // 8
+  "/work/gaming/james-chugs-shotgun-only-tex.webp", // 9
   "/work/irl/gavin-magnus-car-tex.webp", // 10
-  "/work/gaming/faze-replays-simpson-tex.webp", // 11
-  "/work/irl/max-reaction-tex.webp", // 12
+  "/work/gaming/hunted-by-pros-tex.webp", // 11
+  "/work/irl/yusuf-guesses-viewers-tex.webp", // 12
 ];
 const ALL_URLS = [...HERO_URLS, ...WORK_URLS];
 

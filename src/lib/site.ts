@@ -16,27 +16,33 @@ export const SITE = {
 
 export type Work = {
   slug: string;
-  title: string;
-  client: string;
+  title: string; // used for alt text only — no captions are rendered
   category: "gaming" | "irl";
-  tag: string;
 };
 
 export const WORK: Work[] = [
-  // GAMING
-  { slug: "black-ops-7", title: "Black Ops 7 — First Look", client: "COD Creator", category: "gaming", tag: "FPS" },
-  { slug: "faze-replays-simpson", title: "22 Elim Simpson Fortnite", client: "FaZe Replays", category: "gaming", tag: "Fortnite" },
-  { slug: "kreekcraft-roblox", title: "Roblox Update Reaction", client: "KreekCraft", category: "gaming", tag: "Roblox" },
-  { slug: "choifn-live", title: "Fortnite Live Stream", client: "ChoiFN", category: "gaming", tag: "Live" },
-  { slug: "joey773-live", title: "Chapter 6 Season 4 Live", client: "Joey773", category: "gaming", tag: "Fortnite" },
-  { slug: "replays-simpson-only", title: "Simpson Only Challenge", client: "Replays", category: "gaming", tag: "Fortnite" },
-  // IRL
-  { slug: "sketch-jynxzi-madden", title: "Sketch & Jynxzi Play Madden", client: "Sketch", category: "irl", tag: "Collab" },
-  { slug: "gavin-magnus-car", title: "Car Stream w/ Piper", client: "Gavin Magnus", category: "irl", tag: "Stream" },
-  { slug: "sketch-vod", title: "VOD Highlight", client: "Sketch", category: "irl", tag: "VOD" },
-  { slug: "kreekcraft-reaction", title: "IRL Reaction", client: "KreekCraft", category: "irl", tag: "Reaction" },
-  { slug: "max-reaction", title: "Baddie Video Reaction", client: "Max", category: "irl", tag: "Reaction" },
-  { slug: "livespeedy-irl", title: "IRL Stream", client: "LiveSpeedy", category: "irl", tag: "Live" },
+  { slug: "catwoman-typical-gamer", title: "Catwoman — Typical Gamer", category: "gaming" },
+  { slug: "ch7-s3-controller-settings", title: "Chapter 7 Season 3 Controller Settings", category: "gaming" },
+  { slug: "faze-replays-22-elim", title: "FaZe Replays — 22 Elim Simpson", category: "gaming" },
+  { slug: "faze-replays-solo-vs-squads", title: "FaZe Replays — Solo vs Squads", category: "gaming" },
+  { slug: "hunted-by-pros", title: "I Got Hunted By Pros", category: "gaming" },
+  { slug: "james-chugs-shotgun-only", title: "James Chugs — Shotgun Only", category: "gaming" },
+  { slug: "james-chugs-roblox-wyr", title: "James Chugs — Roblox Would You Rather", category: "gaming" },
+  { slug: "polo-peterbot-mask", title: "Polo & Peterbot — Mask Settings", category: "gaming" },
+  { slug: "polo-fncs", title: "Polo — FNCS", category: "gaming" },
+  { slug: "replays-flintknock", title: "Replays — Flint-Knock", category: "gaming" },
+  { slug: "sketch-vod", title: "Sketch — VOD", category: "gaming" },
+  { slug: "spiderman-ranked", title: "Spider-Man Ranked 2.0", category: "gaming" },
+  { slug: "sypherpk-shattered-event", title: "SypherPK — Shattered Live Event", category: "gaming" },
+  { slug: "sypherpk-im-back", title: "SypherPK — I'm Back Livestream", category: "gaming" },
+  { slug: "gavin-alice-date", title: "Gavin & Alice — Date Stream", category: "irl" },
+  { slug: "gavin-magnus-car", title: "Gavin Magnus — Car Stream w/ Piper", category: "irl" },
+  { slug: "guapo-seafood-boil", title: "Guapo — Seafood Boil", category: "irl" },
+  { slug: "gymskin-man-city", title: "Gymskin — Man City", category: "irl" },
+  { slug: "livespeedy", title: "LiveSpeedy — IRL Stream", category: "irl" },
+  { slug: "rakai-maddy", title: "Rakai & Maddy", category: "irl" },
+  { slug: "lacy-ron-geoguessr", title: "Lacy & Ron — GeoGuessr", category: "irl" },
+  { slug: "yusuf-guesses-viewers", title: "Yusuf Guesses His Viewers", category: "irl" },
 ];
 
 export function workSrc(w: Work, texture = false) {

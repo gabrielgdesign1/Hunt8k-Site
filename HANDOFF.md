@@ -103,8 +103,20 @@ Rendered in this order (see `src/app/page.tsx`):
    - The outline→fill effect lives in `globals.css` (`.roster-name`), wrapped
      in `@supports (-webkit-text-stroke:…)` so unsupported browsers get solid
      names rather than 13 invisible rows.
-5. **Work** (`#work`) — filterable gallery (All / Gaming / IRL), thumbnails
-   only with no captions, opening a lightbox (prev/next/Escape). The lightbox
+5. **Work** (`#work`) — filterable gallery (**All Work / Gaming / IRL &
+   Desktop**), thumbnails only with no captions, opening a lightbox
+   (prev/next/Escape).
+   - Each filter opens on a **3×3** and reveals the rest behind a **View
+     more** button; a **View full portfolio** button (his Behance, read from
+     `SITE.socials`) sits below it and is always shown. The reveal is
+     data-driven — `INITIAL = 9`, and View more only appears when a filter
+     holds more than nine, so adding images needs no code change.
+   - **All Work** interleaves the two categories so the opening 3×3 is a mix
+     rather than the first nine gaming pieces.
+   - Current counts: gaming **14** (9 + 5), irl **8**. IRL & Desktop is short
+     of a second 3×3 — it needs 18 to reveal 9 more, so no View more shows
+     there until more images land in `src/raw/irl` or `src/raw/desktop`.
+   The lightbox
    is rendered through a **portal into `<body>`** — it has to be, because this
    section is `relative z-10` inside another `relative z-10` wrapper, so
    anything inside it is capped at z-10 against the fixed navbar (z-50) no
@@ -156,13 +168,30 @@ Optimized web images (WebP) are committed under `public/`:
 - `public/branding/` — `logo.png` (transparent red 8K mark, used everywhere),
   `logo-white.png`, `about.png` (about-me graphic)
 - `public/work/{gaming,irl}/` — portfolio thumbnails: `<slug>.webp` (display)
-  and `<slug>-tex.webp` (smaller WebGL texture)
+  and `<slug>-tex.webp` (smaller WebGL texture). Generated — `optimize.mjs`
+  wipes and rewrites these folders, so don't hand-edit them.
 - `public/hero/` — hero collage images: `main-1..4.webp` + `bg-1..3.webp`
 - `public/creators/` — the 13 creator avatars (fetched from their YouTube
   channels)
 
 **Raw source images are git-ignored** (`Gaming thumbnails/`, `IRL thumbnails/`,
 `Hero section thumbnails/`, `src/raw/`). Regeneration scripts in `scripts/`:
+
+**Adding portfolio pieces:** drop the export into `src/raw/gaming`,
+`src/raw/irl` or `src/raw/desktop`, add a
+`["filename.png", "slug", "Title"]` row to the matching block in
+`scripts/optimize.mjs`, and run it. It dedupes by file hash (the same export
+sitting in two folders publishes once) and writes the ready-made `WORK` array
+to `scripts/work.generated.txt` to paste into `site.ts`. `desktop` and `irl`
+both publish into the single `irl` category. Note `src/raw/_previous/` holds
+the superseded first batch of thumbnails.
+
+> ⚠️ The hero collage's six work textures in `ThumbnailTunnel.tsx` are
+> hard-coded paths. All seven `public/hero/` images are byte-identical to work
+> pieces (Guapo, Lacy & Ron, Catwoman, Polo Peterbot, Polo FNCS, Replays
+> Flint-Knock, Spider-Man) — keep those six clear of that list or the same
+> thumbnail appears twice in the hero. Re-running `optimize.mjs` after
+> renaming a slug will break those paths.
 
 ```bash
 node scripts/optimize.mjs        # work thumbnails → public/work
